@@ -1,11 +1,11 @@
 {
-  "name": "Modularity Boilerplate",
-  "description": "A boilerplate repo for modules.",
-  "slug": "boilerplate",
+  "name": "Modularity Booking",
+  "description": "Adds a bookink feature for Mitt Helsingborg as a module.",
+  "slug": "booking",
   "slugcamelcase": "Boilerplate",
-  "namespace": "ModularityBoilerplate",
-  "capsConstant": "MODULARITY_BOILERPLATE",
-  "author": "Firstname Lastname @ Company",
-  "authoremail": "firstname.lastname@company.com",
-  "github": "githubname"
+  "namespace": "ModularityBooking",
+  "capsConstant": "MODULARITY_BOOKING",
+  "author": "Sebastian Thulin",
+  "authoremail": "sebastian.thulin@helsingborg.se",
+  "github": "helsingborg-stad"
 }
