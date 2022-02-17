@@ -1,22 +1,12 @@
 @if (!$hideTitle)
     @typography([
-        'element' => "h2",
-        'classList' => ['u-margin--0']
+        'element' => "h2"
     ])
         {{ $postTitle }}
     @endtypography
 @endif
 
-@notice([
-    'type' => 'info',
-    'message' => [
-        'text' => $lang->info,
-        'size' => 'sm'
-    ],
-    'icon' => [
-        'name' => 'report',
-        'size' => 'md',
-        'color' => 'white'
-    ]
-])
-@endnotice
+<div id="mh-mount-booking" class="mh-mount-booking">
+    @paper(['attributeList' => ['style' => 'height: 500px;'], 'classList' => ['u-preloader']])
+    @endpaper
+</div>
