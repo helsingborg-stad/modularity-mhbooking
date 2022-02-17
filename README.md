@@ -1,11 +1,3 @@
----
-title: "README"
-date: 2021-05-27
-draft: false
-layout: default
-parent: Boilerplates
----
-
 <!-- SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
