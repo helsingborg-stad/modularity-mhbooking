@@ -1,10 +1,10 @@
 {
-  "name": "Modularity Booking",
+  "name": "Modularity Booking (MH)",
   "description": "Adds a booking feature for Mitt Helsingborg as a module.",
-  "slug": "booking",
+  "slug": "mhbooking",
   "slugcamelcase": "Booking",
   "namespace": "ModularityBooking",
-  "capsConstant": "MODULARITY_BOOKING",
+  "capsConstant": "MODULARITY_MH_BOOKING",
   "author": "Sebastian Thulin",
   "authoremail": "sebastian.thulin@helsingborg.se",
   "github": "helsingborg-stad"
