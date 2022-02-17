@@ -1,8 +1,8 @@
 {
   "name": "Modularity Booking",
-  "description": "Adds a bookink feature for Mitt Helsingborg as a module.",
+  "description": "Adds a booking feature for Mitt Helsingborg as a module.",
   "slug": "booking",
-  "slugcamelcase": "Boilerplate",
+  "slugcamelcase": "Booking",
   "namespace": "ModularityBooking",
   "capsConstant": "MODULARITY_BOOKING",
   "author": "Sebastian Thulin",
