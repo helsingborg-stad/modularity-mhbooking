@@ -16,8 +16,8 @@ module.exports = {
      * Add your entry files here
      */
     entry: {
-        'css/modularity-{{BPREPLACESLUG}}':               './source/sass/modularity-{{BPREPLACESLUG}}.scss',
-        'js/modularity-{{BPREPLACESLUG}}':                './source/js/modularity-{{BPREPLACESLUG}}.js',
+        'css/modularity-mhbooking':               './source/sass/modularity-mhbooking.scss',
+        'js/modularity-mhbooking':                './source/js/modularity-mhbooking.js',
     },
     
     /**

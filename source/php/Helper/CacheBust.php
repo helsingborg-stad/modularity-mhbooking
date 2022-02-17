@@ -1,6 +1,6 @@
 <?php
 
-namespace {{BPREPLACENAMESPACE}}\Helper;
+namespace ModularityMhBooking\Helper;
 
 class CacheBust
 {
@@ -27,15 +27,15 @@ class CacheBust
      */
     public static function getRevManifest()
     {
-        $jsonPath = {{BPREPLACECAPSCONSTANT}}_PATH . apply_filters(
-            '{{BPREPLACENAMESPACE}}/Helper/CacheBust/RevManifestPath',
+        $jsonPath = MODULARITY_MH_BOOKING_PATH . apply_filters(
+            'ModularityMhBooking/Helper/CacheBust/RevManifestPath',
             'dist/manifest.json'
         );
 
         if (file_exists($jsonPath)) {
             return json_decode(file_get_contents($jsonPath), true);
         } elseif (WP_DEBUG) {
-            echo '<div style="color:red">Error: Assets not built. Go to ' . {{BPREPLACECAPSCONSTANT}}_PATH . ' and run gulp. See ' . {{BPREPLACECAPSCONSTANT}}_PATH . 'README.md for more info.</div>';
+            echo '<div style="color:red">Error: Assets not built. Go to ' . MODULARITY_MH_BOOKING_PATH . ' and run gulp. See ' . MODULARITY_MH_BOOKING_PATH . 'README.md for more info.</div>';
         }
     }
 }

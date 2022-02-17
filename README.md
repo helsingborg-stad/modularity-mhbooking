@@ -1,3 +1,11 @@
+---
+title: "README"
+date: 2021-05-27
+draft: false
+layout: default
+parent: Boilerplates
+---
+
 <!-- SHIELDS -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -5,29 +13,34 @@
 [![Issues][issues-shield]][issues-url]
 [![License][license-shield]][license-url]
 
-<h3>Modularity Boilerplate</h3>
+<h3>Modularity Booking (MH)</h3>
 <p>
-  A boilerplate repo for modules.
+  Adds a booking feature for Mitt Helsingborg as a module.
   <br />
-  <a href="https://github.com/helsingborg-stad/modularity-boilerplate/issues">Report Bug</a>
+  <a href="https://github.com/helsingborg-stad/modularity-mhbooking/issues">Report Bug</a>
   ·
-  <a href="https://github.com/helsingborg-stad/modularity-boilerplate/issues">Request Feature</a>
+  <a href="https://github.com/helsingborg-stad/modularity-mhbooking/issues">Request Feature</a>
 </p>
 
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
-- [About Modularity Boilerplate](#about-modularity-boilerplate)
+- [About Modularity Booking (MH)](#about-Modularity Booking (MH))
   - [Built With](#built-with)
+- [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Usage](#usage)
+- [Deploy](#deploy)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
-## About Modularity Boilerplate
+## About Modularity Booking (MH)
 
-Create a new module at record speed! Read the installation instructions below. Setup files will automaticly be removed upon setup.
+[![Modularity Booking (MH) Screen Shot][product-screenshot]](https://example.com)
+
+Here's a blank template to get started:
 
 ### Built With
 
@@ -35,6 +48,10 @@ Create a new module at record speed! Read the installation instructions below. S
 * NPM
 * Webpack
 * Modularity
+
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
@@ -55,24 +72,26 @@ composer require helsingborg-stad/modularity
 
 1. Clone the repo
 ```sh
-git clone https://github.com/helsingborg-stad/modularity-boilerplate.git
+git clone https://github.com/helsingborg-stad/modularity-mhbooking.git
 ```
-2. Edit setup.json file, add your details
-```sh
-nano setup.json
-```
-3. Run setup procedure
-```sh
-php setup.php
-```
-4. Install and build NPM packages
+2. Install and build NPM packages
 ```sh
 npm install && npm run build
 ```
-5. Install composer packages
+3. Install composer packages
 ```sh
 composer install
 ```
+
+## Usage
+
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+
+_For more examples, please refer to the [Documentation](https://example.com)_
+
+## Deploy
+
+Instructions for deploys.
 
 ## Roadmap
 
@@ -99,14 +118,14 @@ Distributed under the [MIT License][license-url].
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/helsingborg-stad/modularity-boilerplate.svg?style=flat-square
-[contributors-url]: https://github.com/helsingborg-stad/modularity-boilerplate/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/helsingborg-stad/modularity-boilerplate.svg?style=flat-square
-[forks-url]: https://github.com/helsingborg-stad/modularity-boilerplate/network/members
-[stars-shield]: https://img.shields.io/github/stars/helsingborg-stad/modularity-boilerplate.svg?style=flat-square
-[stars-url]: https://github.com/helsingborg-stad/modularity-boilerplate/stargazers
-[issues-shield]: https://img.shields.io/github/issues/helsingborg-stad/modularity-boilerplate.svg?style=flat-square
-[issues-url]: https://github.com/helsingborg-stad/modularity-boilerplate/issues
-[license-shield]: https://img.shields.io/github/license/helsingborg-stad/modularity-boilerplate.svg?style=flat-square
-[license-url]: https://raw.githubusercontent.com/helsingborg-stad/modularity-boilerplate/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/helsingborg-stad/modularity-mhbooking.svg?style=flat-square
+[contributors-url]: https://github.com/helsingborg-stad/modularity-mhbooking/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/helsingborg-stad/modularity-mhbooking.svg?style=flat-square
+[forks-url]: https://github.com/helsingborg-stad/modularity-mhbooking/network/members
+[stars-shield]: https://img.shields.io/github/stars/helsingborg-stad/modularity-mhbooking.svg?style=flat-square
+[stars-url]: https://github.com/helsingborg-stad/modularity-mhbooking/stargazers
+[issues-shield]: https://img.shields.io/github/issues/helsingborg-stad/modularity-mhbooking.svg?style=flat-square
+[issues-url]: https://github.com/helsingborg-stad/modularity-mhbooking/issues
+[license-shield]: https://img.shields.io/github/license/helsingborg-stad/modularity-mhbooking.svg?style=flat-square
+[license-url]: https://raw.githubusercontent.com/helsingborg-stad/modularity-mhbooking/master/LICENSE
 [product-screenshot]: images/screenshot.png

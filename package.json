@@ -1,18 +1,18 @@
 {
-  "name": "modularity-{{BPREPLACESLUG}}",
+  "name": "modularity-mhbooking",
   "version": "1.0.0",
-  "description": "{{BPREPLACEDESCRIPTION}}",
+  "description": "Adds a booking feature for Mitt Helsingborg as a module.",
   "main": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/{{BPREPLACEGITHUB}}/modularity-{{BPREPLACESLUG}}"
+    "url": "https://github.com/helsingborg-stad/modularity-mhbooking"
   },
-  "author": "{{BPREPLACEAUTHOR}}",
+  "author": "Sebastian Thulin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/{{BPREPLACEGITHUB}}/modularity-{{BPREPLACESLUG}}/issues"
+    "url": "https://github.com/helsingborg-stad/modularity-mhbooking/issues"
   },
-  "homepage": "https://github.com/{{BPREPLACEGITHUB}}/modularity-{{BPREPLACESLUG}}",
+  "homepage": "https://github.com/helsingborg-stad/modularity-mhbooking",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "cross-env NODE_ENV=development webpack --watch",

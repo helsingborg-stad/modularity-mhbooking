@@ -1,6 +1,6 @@
 <?php
 
-namespace {{BPREPLACENAMESPACE}}\Admin;
+namespace ModularityMhBooking\Admin;
 
 class Settings
 {
@@ -16,9 +16,9 @@ class Settings
     {
         if (function_exists('acf_add_options_sub_page')) {
             acf_add_options_sub_page(array(
-                'page_title'  => __("{{BPREPLACENAME}}", 'modularity-{{BPREPLACESLUG}}'),
-                'menu_title'  => __("{{BPREPLACENAME}} Settings", 'modularity-{{BPREPLACESLUG}}'),
-                'menu_slug'   => 'modularity-{{BPREPLACESLUG}}-settings',
+                'page_title'  => __("Modularity Booking (MH)", 'modularity-mhbooking'),
+                'menu_title'  => __("Modularity Booking (MH) Settings", 'modularity-mhbooking'),
+                'menu_slug'   => 'modularity-mhbooking-settings',
                 'parent_slug' => 'options-general.php',
                 'capability'  => 'manage_options'
             ));

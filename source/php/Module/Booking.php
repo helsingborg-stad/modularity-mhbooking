@@ -1,23 +1,23 @@
 <?php
 
-namespace {{BPREPLACENAMESPACE}}\Module;
+namespace ModularityMhBooking\Module;
 
-use {{BPREPLACENAMESPACE}}\Helper\CacheBust;
+use ModularityMhBooking\Helper\CacheBust;
 
 /**
- * Class {{BPREPLACESLUGCAMELCASE}}
- * @package {{BPREPLACESLUGCAMELCASE}}\Module
+ * Class Booking
+ * @package Booking\Module
  */
-class {{BPREPLACESLUGCAMELCASE}} extends \Modularity\Module
+class Booking extends \Modularity\Module
 {
-    public $slug = '{{BPREPLACESLUG}}';
+    public $slug = 'mhbooking';
     public $supports = array();
 
     public function init()
     {
-        $this->nameSingular = __("{{BPREPLACESLUGCAMELCASE}}", 'modularity-{{BPREPLACESLUG}}');
-        $this->namePlural = __("{{BPREPLACESLUGCAMELCASE}}", 'modularity-{{BPREPLACESLUG}}');
-        $this->description = __("{{BPREPLACEDESCRIPTION}}", 'modularity-{{BPREPLACESLUG}}');
+        $this->nameSingular = __("Booking", 'modularity-mhbooking');
+        $this->namePlural = __("Booking", 'modularity-mhbooking');
+        $this->description = __("Adds a booking feature for Mitt Helsingborg as a module.", 'modularity-mhbooking');
     }
 
     /**
@@ -36,8 +36,8 @@ class {{BPREPLACESLUGCAMELCASE}} extends \Modularity\Module
         //Translations
         $data['lang'] = (object) array(
             'info' => __(
-                "Hey! This is your new {{BPREPLACENAME}} module. Let's get going.",
-                'modularity-{{BPREPLACESLUG}}'
+                "Hey! This is your new Modularity Booking (MH) module. Let's get going.",
+                'modularity-mhbooking'
             )
         );
 
@@ -50,7 +50,7 @@ class {{BPREPLACESLUGCAMELCASE}} extends \Modularity\Module
      */
     public function template(): string
     {
-        return "{{BPREPLACESLUG}}.blade.php";
+        return "mhbooking.blade.php";
     }
 
     /**
@@ -61,14 +61,14 @@ class {{BPREPLACESLUGCAMELCASE}} extends \Modularity\Module
     {
         //Register custom css
         wp_register_style(
-            'modularity-{{BPREPLACESLUG}}',
-            {{BPREPLACECAPSCONSTANT}}_URL . '/dist/' . CacheBust::name('css/modularity-{{BPREPLACESLUG}}.css'),
+            'modularity-mhbooking',
+            MODULARITY_MH_BOOKING_URL . '/dist/' . CacheBust::name('css/modularity-mhbooking.css'),
             null,
             '1.0.0'
         );
 
         //Enqueue
-        wp_enqueue_style('modularity-{{BPREPLACESLUG}}');
+        wp_enqueue_style('modularity-mhbooking');
     }
 
     /**
@@ -79,14 +79,14 @@ class {{BPREPLACESLUGCAMELCASE}} extends \Modularity\Module
     {
         //Register custom css
         wp_register_script(
-            'modularity-{{BPREPLACESLUG}}',
-            {{BPREPLACECAPSCONSTANT}}_URL . '/dist/' . CacheBust::name('js/modularity-{{BPREPLACESLUG}}.js'),
+            'modularity-mhbooking',
+            MODULARITY_MH_BOOKING_URL . '/dist/' . CacheBust::name('js/modularity-mhbooking.js'),
             null,
             '1.0.0'
         );
 
         //Enqueue
-        wp_enqueue_script('modularity-{{BPREPLACESLUG}}');
+        wp_enqueue_script('modularity-mhbooking');
     }
 
     /**
