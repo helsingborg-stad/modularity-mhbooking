@@ -4,7 +4,6 @@ import DatePicker from './DatePicker';
 import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 import moment from 'moment';
 import { consolidateTimeSlots } from './helpers/BookingHelper';
-import './App.css';
 
 interface TextFieldInterface {
   onChange: (event: any) => void;
