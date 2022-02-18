@@ -41,8 +41,7 @@ $acfExportManager = new \AcfExportManager\AcfExportManager();
 $acfExportManager->setTextdomain('modularity-mhbooking');
 $acfExportManager->setExportFolder(MODULARITY_MH_BOOKING_PATH . 'source/php/AcfFields/');
 $acfExportManager->autoExport(array(
-    'mhbooking-module' => 'group_61ea7a87e8mmm', //Update with acf id here, module view
-    'mhbooking-settings' => 'group_61ea7a87e8nnn' //Update with acf id here, settings view
+    'mhbooking-module' => 'group_620f6978b127c', //Update with acf id here, module view
 ));
 $acfExportManager->import();
 
