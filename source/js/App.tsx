@@ -11,20 +11,8 @@ const GridRow = ({children, modFormField}: GridRowProps) => <div className={`o-g
 interface GridElementProps { children: React.ReactChild | React.ReactChild[]; width: number; }
 const GridElement = ({children, width}: GridElementProps) => <div className={`o-grid-${width}@md`}>{children}</div>
 
-interface CardProps { children: React.ReactChild | React.ReactChild[]; }
-const Card = ({children}: CardProps) => <div className='c-card c-card--panel c-card--default c-card--ratio-4-3'>{children}</div>
-
-interface CardHeaderProps { children: React.ReactChild | React.ReactChild[]; }
-const CardHeader = ({children}: CardHeaderProps) => <div className='c-card__header'>{children}</div>
-
-interface CardBodyProps { children: React.ReactChild | React.ReactChild[]; }
-const CardBody = ({children}: CardBodyProps) => <div className='c-card__body'>{children}</div>
-
 interface BoxContentProps { children: React.ReactChild | React.ReactChild[]; }
 const BoxContent = ({children}: BoxContentProps) => <div className='box-content modularity-validation mod-form'>{children}</div>
-
-interface FormProps { children: React.ReactChild | React.ReactChild[]; }
-const Form = ({children}: FormProps) => <div className='modularity-mod-form'>{children}</div>
 
 type StatusType = 'loading' | 'ready' | 'sending' | 'sent';
 
@@ -136,23 +124,9 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <link rel="stylesheet" id="styleguide-css" type="text/css"
-            href="http://v2.styleguide.helsingborg.se/assets/dist/css/styleguide-css.min.css"
-            media="all"></link>
-      <Form>
-        <Card>
-          <CardHeader>
-            Boka tillfälle
-          </CardHeader>
-          <CardBody>
-            <BoxContent>
-              {content[status]}
-            </BoxContent>
-          </CardBody>
-        </Card>
-      </Form>
-    </div>
+    <BoxContent>
+      {content[status]}
+    </BoxContent>
   );
 }
 
