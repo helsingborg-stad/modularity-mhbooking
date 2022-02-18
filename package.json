@@ -14,14 +14,9 @@
   },
   "homepage": "https://github.com/helsingborg-stad/modularity-mhbooking",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "cross-env NODE_ENV=development webpack --watch",
-    "build:dev": "cross-env NODE_ENV=development webpack",
-    "build": "cross-env NODE_ENV=production webpack",
-    "react-start": "node scripts/start.js",
-    "react-build": "node scripts/build.js",
-    "react-test": "node scripts/test.js",
-    "react-eject": "node scripts/eject.js"
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [
