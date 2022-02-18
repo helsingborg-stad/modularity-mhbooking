@@ -22,23 +22,27 @@ const DatePicker = ({ availableDates, date, onDateSelected }: DatePickerInterfac
   return (
     <>
       <div className='o-grid-6@md'>
-        <label className='c-field__text--label'>
-          Datum
-        </label>
-        <select value={selectedDate} onChange={handleDateChange} className='c-select'>
-          <option value={""} key={'default'}>Välj datum</option>
-          {dates.map((date) => <option key={date}>{date}</option>)}
-        </select>
-        <br />
+        <div className='form-group'>
+          <label htmlFor='selectDate'>
+            Datum<br/>
+          </label>
+          <select id='selectDate' value={selectedDate} onChange={handleDateChange} className='c-select'>
+            <option value={""} key={'default'}>Välj datum</option>
+            {dates.map((date) => <option key={date}>{date}</option>)}
+          </select>
+          <br />
+        </div>
       </div>
       <div className='o-grid-6@md'>
-        <label className='c-field__text--label'>
-          Tid
-        </label>
-        <select value={JSON.stringify(selectedTime)} onChange={handleTimeChange} className='c-select'>
-          <option value={""} key={'default'}>Välj tid</option>
-          {times.map((time) => <option value={JSON.stringify(time)} key={JSON.stringify(time)}>{formatTime(time)}</option>)}
-        </select>
+        <div className='form-group'>
+          <label htmlFor='selectTime'>
+            Tid<br/>
+          </label>
+          <select id='selectTime' value={JSON.stringify(selectedTime)} onChange={handleTimeChange} className='c-select'>
+            <option value={""} key={'default'}>Välj tid</option>
+            {times.map((time) => <option value={JSON.stringify(time)} key={JSON.stringify(time)}>{formatTime(time)}</option>)}
+          </select>        
+        </div>
       </div>
     </>
   );
