@@ -35,8 +35,8 @@ class Booking extends \Modularity\Module
 
         //Translations
         $data['lang'] = (object) array(
-            'info' => __(
-                "Hey! This is your new Modularity Booking (MH) module. Let's get going.",
+            'missingEp' => __(
+                "No endpoint configured, please add one in the module settings.",
                 'modularity-mhbooking'
             )
         );
