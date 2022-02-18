@@ -1,5 +1,5 @@
 @if(!empty($modMhbookingEndpoint))
-    @card()
+    @card(['context' => 'module.mhbooking'])
         <div class="c-card__body">
             @if (!$hideTitle)
                 @typography([
