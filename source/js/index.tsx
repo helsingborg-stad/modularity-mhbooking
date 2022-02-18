@@ -8,7 +8,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('#mh-mount-booking')
+  document.getElementById('mh-mount-booking')
 );
 
 // If you want to start measuring performance in your app, pass a function
