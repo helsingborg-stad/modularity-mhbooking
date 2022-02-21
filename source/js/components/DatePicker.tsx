@@ -1,10 +1,11 @@
 interface DatePickerInterface {
   availableDates: Record<string, any[]>;
   date: Record<string, any>;
+  required: boolean;
   onDateSelected: (date: Record<string, string>) => void;
 }
 
-const DatePicker = ({ availableDates, date, onDateSelected }: DatePickerInterface) => {
+const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
   const { date: selectedDate, time: selectedTime } = date ?? {};
   const dates = Object.keys(availableDates);
   const times = selectedDate ? availableDates[selectedDate] : [];
@@ -18,7 +19,7 @@ const DatePicker = ({ availableDates, date, onDateSelected }: DatePickerInterfac
   }
 
   const formatTime = (t: any) => `${t.startTime.substring(0, t.startTime.indexOf("+"))}-${t.endTime.substring(0, t.startTime.indexOf("+"))}`
-  
+
   return (
     <>
       <div className='o-grid-6@md'>
@@ -26,7 +27,7 @@ const DatePicker = ({ availableDates, date, onDateSelected }: DatePickerInterfac
           <label htmlFor='selectDate'>
             Datum<br/>
           </label>
-          <select id='selectDate' value={selectedDate} onChange={handleDateChange} className='c-select'>
+          <select id='selectDate' value={selectedDate} onChange={handleDateChange} className='c-select' required={required}>
             <option value={""} key={'default'}>Välj datum</option>
             {dates.map((date) => <option key={date}>{date}</option>)}
           </select>
@@ -38,10 +39,10 @@ const DatePicker = ({ availableDates, date, onDateSelected }: DatePickerInterfac
           <label htmlFor='selectTime'>
             Tid<br/>
           </label>
-          <select id='selectTime' value={JSON.stringify(selectedTime)} onChange={handleTimeChange} className='c-select'>
+          <select id='selectTime' value={JSON.stringify(selectedTime)} onChange={handleTimeChange} className='c-select' required={required}>
             <option value={""} key={'default'}>Välj tid</option>
             {times.map((time) => <option value={JSON.stringify(time)} key={JSON.stringify(time)}>{formatTime(time)}</option>)}
-          </select>        
+          </select>
         </div>
       </div>
     </>
