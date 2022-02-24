@@ -5,7 +5,7 @@ interface NoticeProps {
 }
 
 const Notice = ({ children, iconName, type = "info" }: NoticeProps) => (
-  <div className={`c-notice c-notice--${type}`}>
+  <div className={`u-margin__bottom--1 c-notice c-notice--${type}`}>
     <span className="c-notice__icon">
       <i
         className="c-icon c-icon--size-md material-icons"

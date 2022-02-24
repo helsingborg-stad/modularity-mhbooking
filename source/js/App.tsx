@@ -110,7 +110,7 @@ function App() {
     sending: <p>Skickar...</p>,
     sent: <p>Din bokning har skickats.</p>,
     ready: (
-      <div>
+      <div className="u-margin__top--1">
         <div>
           {errors.map((error) => {
             return (
@@ -194,7 +194,11 @@ function App() {
           {/* Submit button */}
           <GridRow>
             <GridElement width={12}>
-              <Button type="submit" label="Skicka" />
+              <Button
+                className="u-margin__top--1"
+                type="submit"
+                label="Skicka"
+              />
             </GridElement>
           </GridRow>
         </form>
@@ -204,9 +208,11 @@ function App() {
       <div>
         {errors.map((error) => {
           return (
-            <Notice key={error} iconName="error" type="danger">
-              {error}
-            </Notice>
+            <div className="u-margin__top--1">
+              <Notice key={error} iconName="error" type="danger">
+                {error}
+              </Notice>
+            </div>
           );
         })}
       </div>
