@@ -1,21 +1,17 @@
-import moment from "moment";
-import { BookingItem, TimeSlotDataType } from "../types/BookingTypes";
-import { convertGraphDataToBookingItem } from "../helpers/BookingHelper";
-import { get, patch, post, remove } from "../helpers/ApiRequest";
+import moment from 'moment';
+import { BookingItem, TimeSlotDataType } from '../types/BookingTypes';
+import { convertGraphDataToBookingItem } from '../helpers/BookingHelper';
+import { get, patch, post, remove } from '../helpers/ApiRequest';
 
-const getBooking = async (
-  bookingId: string
-): Promise<Record<string, unknown>> => {
+const getBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await get(`/booking/${encodeURIComponent(bookingId)}`);
   if (response.status !== 200) {
-    throw new Error(
-      response?.message || `getBooking: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `getBooking: Recieved error ${response.status}`);
   }
 
   const success = response?.data?.data?.attributes;
   if (success) return success;
-  throw new Error("getBooking: Response does not contain data.data.attributes");
+  throw new Error('getBooking: Response does not contain data.data.attributes');
 };
 
 const createBooking = async (
@@ -26,7 +22,7 @@ const createBooking = async (
   referenceCode?: string,
   subject?: string,
   location?: string,
-  message?: string
+  message?: string,
 ): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
@@ -36,34 +32,28 @@ const createBooking = async (
     referenceCode,
     location,
     body: `<body><p>Du har fått en bokning. Klicka på Acceptera för att bekräfta bokningen.</p>${message}</body>`,
-    subject: subject || "Mitt Helsingborg bokning",
+    subject: subject || 'Mitt Helsingborg bokning',
   };
 
-  const response = await post("/booking", body);
+  const response = await post('/booking', body);
   if (response.status !== 200) {
-    throw new Error(
-      response?.message || `createBooking: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `createBooking: Recieved error ${response.status}`);
   }
 
   const booked = response?.data?.data;
   if (booked) return booked;
-  throw new Error("createBooking: Response does not contain data.data");
+  throw new Error('createBooking: Response does not contain data.data');
 };
 
-const cancelBooking = async (
-  bookingId: string
-): Promise<Record<string, unknown>> => {
+const cancelBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(bookingId)}`);
   if (response.status !== 200) {
-    throw new Error(
-      response?.message || `cancelBooking: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `cancelBooking: Recieved error ${response.status}`);
   }
 
   const success = response?.data?.data;
   if (success) return success;
-  throw new Error("cancelBooking: Response does not contain data.data");
+  throw new Error('cancelBooking: Response does not contain data.data');
 };
 
 const updateBooking = async (
@@ -75,7 +65,7 @@ const updateBooking = async (
   referenceCode?: string,
   subject?: string,
   location?: string,
-  message?: string
+  message?: string,
 ): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
@@ -85,95 +75,61 @@ const updateBooking = async (
     referenceCode,
     location,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
-    subject: subject || "Mitt Helsingborg bokning",
+    subject: subject || 'Mitt Helsingborg bokning',
   };
 
-  const response = await patch(
-    `/booking/${encodeURIComponent(bookingId)}`,
-    body
-  );
+  const response = await patch(`/booking/${encodeURIComponent(bookingId)}`, body);
   if (response.status !== 200) {
-    throw new Error(
-      response?.message || `updateBooking: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `updateBooking: Recieved error ${response.status}`);
   }
 
   const booked = response?.data?.data;
   if (booked) return booked;
-  throw new Error("updateBooking: Response does not contain data.data");
+  throw new Error('updateBooking: Response does not contain data.data');
 };
 
-const searchBookings = async (
-  referenceCode: string,
-  startTime: string,
-  endTime: string
-): Promise<BookingItem[]> => {
+const searchBookings = async (referenceCode: string, startTime: string, endTime: string): Promise<BookingItem[]> => {
   const response = await post(`/booking/search`, {
     referenceCode,
     startTime,
     endTime,
   });
   if (response.status !== 200) {
-    throw new Error(
-      response?.message || `searchBookings: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `searchBookings: Recieved error ${response.status}`);
   }
 
   const bookings = response?.data?.data?.attributes;
   if (!bookings) {
-    throw new Error(
-      "searchBookings: Response does not contain data.data.attributes"
-    );
+    throw new Error('searchBookings: Response does not contain data.data.attributes');
   }
 
-  return bookings
-    .map(convertGraphDataToBookingItem)
-    .filter((item: BookingItem) => item.status !== "Declined");
+  return bookings.map(convertGraphDataToBookingItem).filter((item: BookingItem) => item.status !== 'Declined');
 };
 
-const getHistoricalAttendees = async (
-  referenceCode: string,
-  startTime: string,
-  endTime: string
-): Promise<string[]> => {
-  const response = await get(
-    `/booking/getHistoricalAttendees/${referenceCode}`,
-    undefined,
-    { startTime, endTime }
-  );
+const getHistoricalAttendees = async (referenceCode: string, startTime: string, endTime: string): Promise<string[]> => {
+  const response = await get(`/booking/getHistoricalAttendees/${referenceCode}`, undefined, { startTime, endTime });
   if (response.status !== 200) {
-    throw new Error(
-      response?.message ||
-        `getHistoricalAttendees: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `getHistoricalAttendees: Recieved error ${response.status}`);
   }
 
   const timeSlots = response?.data?.data?.attributes;
   if (timeSlots) return timeSlots;
-  throw new Error(
-    "getHistoricalAttendees: Response does not contain data.data.attributes"
-  );
+  throw new Error('getHistoricalAttendees: Response does not contain data.data.attributes');
 };
 
-const getTimeSlots = async (
-  attendees: string[],
-  startTime: string,
-  endTime: string
-): Promise<TimeSlotDataType> => {
+const getTimeSlots = async (attendees: string[], startTime: string, endTime: string): Promise<TimeSlotDataType> => {
   const response = await post(`/timeslots/getTimeSlots`, {
     attendees,
     startTime,
     endTime,
   });
   if (response.status !== 200) {
-    throw new Error(
-      response?.message || `getTimeSlots: Recieved error ${response.status}`
-    );
+    throw new Error(response?.message || `getTimeSlots: Recieved error ${response.status}`);
   }
 
   const timeSlots = response?.data?.data;
   if (timeSlots) return timeSlots;
-  throw new Error("getTimeSlots: Response does not contain data.data");
+  throw new Error('getTimeSlots: Response does not contain data.data');
 };
 
 export {

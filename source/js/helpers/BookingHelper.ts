@@ -1,19 +1,12 @@
-import moment from "moment";
-import {
-  Administrator,
-  BookingItem,
-  GraphData,
-  TimeSlot,
-  TimeSlotDataType,
-  TimeSpan,
-} from "../types/BookingTypes";
+import moment from 'moment';
+import { Administrator, BookingItem, GraphData, TimeSlot, TimeSlotDataType, TimeSpan } from '../types/BookingTypes';
 
 const mockAdministrator: Administrator = {
-  title: "Lex Luthor",
-  department: "Socialförvaltningen",
-  jobTitle: "Socialsekreterare",
-  email: "kontaktcenter@helsingborg.se",
-  phone: "042 - 00 00 00",
+  title: 'Lex Luthor',
+  department: 'Socialförvaltningen',
+  jobTitle: 'Socialsekreterare',
+  email: 'kontaktcenter@helsingborg.se',
+  phone: '042 - 00 00 00',
 };
 
 function timeSpanToString(timeSpan: TimeSpan | TimeSlot): string {
@@ -28,9 +21,7 @@ function compareTimeSlots(a: TimeSlot, b: TimeSlot) {
  * @description Takes a timeSlots object output by the backend and propagates information from
  * the higher levels to the innermost objects, while also joining the timetables of all admins
  */
-function consolidateTimeSlots(
-  timeSlots: TimeSlotDataType
-): Record<string, TimeSlot[]> {
+function consolidateTimeSlots(timeSlots: TimeSlotDataType): Record<string, TimeSlot[]> {
   /**
    * First we do the joining, by using the timespan as a property.
    * This allows the data to be used for booking a service.
@@ -53,8 +44,7 @@ function consolidateTimeSlots(
           const newObject: TimeSlot = { ...timeSpan, date, emails: [email] };
           joinedTimeSlots[date][timeString] = newObject;
         } else {
-          const oldEmails: string[] =
-            joinedTimeSlots[date][timeString].emails || [];
+          const oldEmails: string[] = joinedTimeSlots[date][timeString].emails || [];
           joinedTimeSlots[date][timeString].emails = [...oldEmails, email];
         }
       });
@@ -80,10 +70,10 @@ const convertGraphDataToBookingItem = (graphData: GraphData): BookingItem => {
   const firstAttendee = graphData.Attendees[0];
   const administrator = { ...mockAdministrator, email: firstAttendee.Email };
   const { Status: status } = firstAttendee;
-  const date = moment(graphData.StartTime).format("YYYY-MM-DD");
-  const startTime = moment(graphData.StartTime).format("HH:mm");
-  const endTime = moment(graphData.EndTime).format("HH:mm");
-  const title = graphData.Subject.substring(0, graphData.Subject.indexOf("#"));
+  const date = moment(graphData.StartTime).format('YYYY-MM-DD');
+  const startTime = moment(graphData.StartTime).format('HH:mm');
+  const endTime = moment(graphData.EndTime).format('HH:mm');
+  const title = graphData.Subject.substring(0, graphData.Subject.indexOf('#'));
   const referenceCode = graphData.ReferenceCode;
   const { BookingId: id, Body: body, Location: location } = graphData;
   return {
