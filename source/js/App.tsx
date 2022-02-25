@@ -1,25 +1,23 @@
-import { useEffect, useState, FormEvent } from "react";
-import { createBooking, getTimeSlots } from "./services/BookingService";
-import { getAdministratorsBySharedMailbox } from "./services/BookablesService";
-import moment from "moment";
-import { consolidateTimeSlots } from "./helpers/BookingHelper";
-import { DatePicker, TextField, Button, Notice } from "./components";
+import { useEffect, useState, FormEvent } from 'react';
+import { createBooking, getTimeSlots } from './services/BookingService';
+import { getAdministratorsBySharedMailbox } from './services/BookablesService';
+import moment from 'moment';
+import { consolidateTimeSlots } from './helpers/BookingHelper';
+import { DatePicker, TextField, Button, Notice } from './components';
 
 interface GridRowProps {
   children: React.ReactChild | React.ReactChild[];
   modFormField?: boolean;
 }
 const GridRow = ({ children, modFormField }: GridRowProps) => (
-  <div className={`o-grid${modFormField && " mod-form-field"}`}>{children}</div>
+  <div className={`o-grid${modFormField && ' mod-form-field'}`}>{children}</div>
 );
 
 interface GridElementProps {
   children: React.ReactChild | React.ReactChild[];
   width: number;
 }
-const GridElement = ({ children, width }: GridElementProps) => (
-  <div className={`o-grid-${width}@md`}>{children}</div>
-);
+const GridElement = ({ children, width }: GridElementProps) => <div className={`o-grid-${width}@md`}>{children}</div>;
 
 interface BoxContentProps {
   children: React.ReactChild | React.ReactChild[];
@@ -28,29 +26,26 @@ const BoxContent = ({ children }: BoxContentProps) => (
   <div className="box-content modularity-validation mod-form">{children}</div>
 );
 
-type StatusType = "loading" | "ready" | "sending" | "sent" | "error";
+type StatusType = 'loading' | 'ready' | 'sending' | 'sent' | 'error';
 
 const coerceError = (error: unknown): Error => {
-  return typeof error === "string" ? new Error(error) : (error as Error);
+  return typeof error === 'string' ? new Error(error) : (error as Error);
 };
 
 function App() {
   const [availableDates, setAvailableDates] = useState<any>(undefined);
   const [selectedDate, setSelectedDate] = useState<any>(undefined);
   const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
-  const [status, setStatus] = useState<StatusType>("loading");
+  const [status, setStatus] = useState<StatusType>('loading');
   const [errors, setErrors] = useState<string[]>([]);
-  const sharedMailbox = "datatorget_testgrupp@helsingborgdemo.onmicrosoft.com";
+  const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
 
   const handleUpdateDate = (date: any) => {
     setSelectedDate(date);
   };
 
   const formToHTML = (form: any) =>
-    form.reduce(
-      (prev: string, item: any) => prev + `<p>${item.name}: ${item.value}</p>`,
-      ""
-    );
+    form.reduce((prev: string, item: any) => prev + `<p>${item.name}: ${item.value}</p>`, '');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -59,22 +54,13 @@ function App() {
     const startDate = `${date}T${startTime}`;
     const endDate = `${date}T${endTime}`;
     const body = formToHTML(Object.values(formAnswers));
-    setStatus("sending");
+    setStatus('sending');
     try {
-      await createBooking(
-        [emails[0]],
-        startDate,
-        endDate,
-        undefined,
-        undefined,
-        "Volontärsamtal",
-        undefined,
-        body
-      );
-      setStatus("sent");
+      await createBooking([emails[0]], startDate, endDate, undefined, undefined, 'Volontärsamtal', undefined, body);
+      setStatus('sent');
     } catch (error: unknown) {
       setErrors([...errors, coerceError(error)?.message]);
-      setStatus("ready");
+      setStatus('ready');
     }
   };
 
@@ -86,20 +72,14 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const emailsResponse = await getAdministratorsBySharedMailbox(
-          sharedMailbox
-        );
-        const timeSlotData = await getTimeSlots(
-          emailsResponse,
-          moment().format(),
-          moment().add(6, "months").format()
-        );
+        const emailsResponse = await getAdministratorsBySharedMailbox(sharedMailbox);
+        const timeSlotData = await getTimeSlots(emailsResponse, moment().format(), moment().add(6, 'months').format());
         const dates = consolidateTimeSlots(timeSlotData);
         setAvailableDates(dates);
-        setStatus("ready");
+        setStatus('ready');
       } catch (error: unknown) {
-        setErrors([...errors, coerceError(error)?.message]);
-        setStatus("error");
+        setErrors((state) => [...state, coerceError(error)?.message]);
+        setStatus('error');
       }
     };
     void fetchData();
@@ -138,7 +118,7 @@ function App() {
                 label="Förnamn"
                 id="firstname"
                 onChange={updateForm}
-                value={formAnswers["firstname"]?.value}
+                value={formAnswers.firstname?.value}
                 type="text"
                 required
               />
@@ -148,7 +128,7 @@ function App() {
                 label="Efternamn"
                 id="lastname"
                 onChange={updateForm}
-                value={formAnswers["lastname"]?.value}
+                value={formAnswers.lastname?.value}
                 type="text"
                 required
               />
@@ -162,19 +142,13 @@ function App() {
                 label="E-post"
                 id="email"
                 onChange={updateForm}
-                value={formAnswers["email"]?.value}
+                value={formAnswers.email?.value}
                 type="email"
                 required
               />
             </GridElement>
             <GridElement width={6}>
-              <TextField
-                label="Telefon"
-                id="phone"
-                onChange={updateForm}
-                value={formAnswers["phone"]?.value}
-                type="tel"
-              />
+              <TextField label="Telefon" id="phone" onChange={updateForm} value={formAnswers.phone?.value} type="tel" />
             </GridElement>
           </GridRow>
 
@@ -185,7 +159,7 @@ function App() {
                 label="Övrig information"
                 id="comment"
                 onChange={updateForm}
-                value={formAnswers["comment"]?.value}
+                value={formAnswers.comment?.value}
                 type="text"
               />
             </GridElement>
@@ -194,11 +168,7 @@ function App() {
           {/* Submit button */}
           <GridRow>
             <GridElement width={12}>
-              <Button
-                className="u-margin__top--1"
-                type="submit"
-                label="Skicka"
-              />
+              <Button className="u-margin__top--1" type="submit" label="Skicka" />
             </GridElement>
           </GridRow>
         </form>
