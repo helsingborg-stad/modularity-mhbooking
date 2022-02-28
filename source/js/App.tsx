@@ -3,22 +3,7 @@ import { createBooking, getTimeSlots } from './services/BookingService';
 import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 import moment from 'moment';
 import { consolidateTimeSlots } from './helpers/BookingHelper';
-import { DatePicker, TextField, Button, Notice } from './components';
-
-interface GridRowProps {
-  children: React.ReactChild | React.ReactChild[];
-  modFormField?: boolean;
-}
-const GridRow = ({ children, modFormField }: GridRowProps) => (
-  <div className={`o-grid${modFormField && ' mod-form-field'}`}>{children}</div>
-);
-
-interface GridElementProps {
-  children: React.ReactChild | React.ReactChild[];
-  width: number;
-}
-const GridElement = ({ children, width }: GridElementProps) => <div className={`o-grid-${width}@md`}>{children}</div>;
-
+import { Confirmation, ErrorList, Form, Loader } from './components';
 interface BoxContentProps {
   children: React.ReactChild | React.ReactChild[];
 }
@@ -86,107 +71,23 @@ function App() {
   }, []);
 
   const content: Record<StatusType, JSX.Element> = {
-    loading: <p>Laddar formulär...</p>,
-    sending: <p>Skickar...</p>,
-    sent: <p>Din bokning har skickats.</p>,
+    loading: <Loader text="Laddar formulär..." />,
+    sending: <Loader text="Skickar..." />,
+    sent: <Confirmation text="Din bokning har skickats" />,
     ready: (
-      <div className="u-margin__top--1">
-        <div>
-          {errors.map((error) => {
-            return (
-              <Notice key={error} iconName="error" type="danger">
-                {error}
-              </Notice>
-            );
-          })}
-        </div>
-        <form onSubmit={handleSubmit} className="c-form">
-          {/* Date picker */}
-          <GridRow modFormField>
-            <DatePicker
-              availableDates={availableDates}
-              date={selectedDate}
-              onDateSelected={handleUpdateDate}
-              required
-            />
-          </GridRow>
-
-          {/* Name and lastname */}
-          <GridRow modFormField>
-            <GridElement width={6}>
-              <TextField
-                label="Förnamn"
-                id="firstname"
-                onChange={updateForm}
-                value={formAnswers.firstname?.value}
-                type="text"
-                required
-              />
-            </GridElement>
-            <GridElement width={6}>
-              <TextField
-                label="Efternamn"
-                id="lastname"
-                onChange={updateForm}
-                value={formAnswers.lastname?.value}
-                type="text"
-                required
-              />
-            </GridElement>
-          </GridRow>
-
-          {/* Email and phone */}
-          <GridRow modFormField>
-            <GridElement width={6}>
-              <TextField
-                label="E-post"
-                id="email"
-                onChange={updateForm}
-                value={formAnswers.email?.value}
-                type="email"
-                required
-              />
-            </GridElement>
-            <GridElement width={6}>
-              <TextField label="Telefon" id="phone" onChange={updateForm} value={formAnswers.phone?.value} type="tel" />
-            </GridElement>
-          </GridRow>
-
-          {/* Comment */}
-          <GridRow modFormField>
-            <GridElement width={12}>
-              <TextField
-                label="Övrig information"
-                id="comment"
-                onChange={updateForm}
-                value={formAnswers.comment?.value}
-                type="text"
-              />
-            </GridElement>
-          </GridRow>
-
-          {/* Submit button */}
-          <GridRow>
-            <GridElement width={12}>
-              <Button className="u-margin__top--1" type="submit" label="Skicka" />
-            </GridElement>
-          </GridRow>
-        </form>
-      </div>
+      <>
+        <ErrorList errors={errors} />
+        <Form
+          availableDates={availableDates}
+          formAnswers={formAnswers}
+          handleSubmit={handleSubmit}
+          handleUpdateDate={handleUpdateDate}
+          selectedDate={selectedDate}
+          updateForm={updateForm}
+        />
+      </>
     ),
-    error: (
-      <div>
-        {errors.map((error) => {
-          return (
-            <div className="u-margin__top--1">
-              <Notice key={error} iconName="error" type="danger">
-                {error}
-              </Notice>
-            </div>
-          );
-        })}
-      </div>
-    ),
+    error: <ErrorList errors={errors} />,
   };
 
   return <BoxContent>{content[status]}</BoxContent>;
