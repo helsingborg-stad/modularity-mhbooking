@@ -1,6 +1,6 @@
 import { HTMLInputTypeAttribute } from 'react';
 interface TextFieldInterface {
-  onChange: (event: any) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   id: string;
   label: string;

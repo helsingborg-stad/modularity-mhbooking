@@ -8,3 +8,4 @@ export { default as GridRow } from './GridRow';
 export { default as GridElement } from './GridElement';
 export { default as ErrorList } from './ErrorList';
 export { default as Loader } from './Loader';
+export type { ConfirmationInterface } from './Confirmation';

@@ -1,5 +1,12 @@
 import moment from 'moment';
-import { BookingItem, TimeSlotDataType } from '../types/BookingTypes';
+import {
+  AdministratorDetails,
+  BookingItem,
+  BookingRequest,
+  TimeSlot,
+  TimeSlotDataType,
+  FormData,
+} from '../types/BookingTypes';
 import { convertGraphDataToBookingItem } from '../helpers/BookingHelper';
 import { get, patch, post, remove } from '../helpers/ApiRequest';
 
@@ -14,16 +21,16 @@ const getBooking = async (bookingId: string): Promise<Record<string, unknown>> =
   throw new Error('getBooking: Response does not contain data.data.attributes');
 };
 
-const createBooking = async (
-  requiredAttendees: string[],
-  startTime: string,
-  endTime: string,
-  optionalAttendees?: string[],
-  referenceCode?: string,
-  subject?: string,
-  location?: string,
-  message?: string,
-): Promise<Record<string, unknown>> => {
+const createBooking = async ({
+  requiredAttendees,
+  startTime,
+  endTime,
+  optionalAttendees,
+  referenceCode,
+  subject,
+  location,
+  message,
+}: BookingRequest): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
     startTime,
@@ -132,6 +139,31 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
   throw new Error('getTimeSlots: Response does not contain data.data');
 };
 
+const getAdministratorDetails = async (email: string): Promise<AdministratorDetails> => {
+  const response = await get(`/booking/getAdministratorDetails/${email}`);
+  if (response.status !== 200) {
+    throw new Error(response?.message || `getAdministratorDetails: Recieved error ${response.status}`);
+  }
+
+  const success = response?.data?.data?.attributes;
+  if (success) return success;
+  throw new Error('getAdministratorDetails: Response does not contain data.data.attributes');
+};
+
+const formToHTML = (form: any) =>
+  form.reduce((prev: string, item: any) => prev + `<p>${item.name}: ${item.value}</p>`, '');
+
+const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
+  return {
+    requiredAttendees: [...timeSlot.emails],
+    date: timeSlot.date,
+    endTime: `${timeSlot.date}T${timeSlot.endTime}`,
+    startTime: `${timeSlot.date}T${timeSlot.startTime}`,
+    subject: 'Volontärsamtal',
+    message: formToHTML(Object.values(formData)),
+  };
+};
+
 export {
   getBooking,
   createBooking,
@@ -140,4 +172,6 @@ export {
   searchBookings,
   getHistoricalAttendees,
   getTimeSlots,
+  getAdministratorDetails,
+  buildBookingRequest,
 };

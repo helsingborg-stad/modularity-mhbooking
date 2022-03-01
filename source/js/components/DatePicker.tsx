@@ -1,25 +1,32 @@
+import { TimeSlot } from '../types/BookingTypes';
+
 interface DatePickerInterface {
-  availableDates: Record<string, any[]>;
-  date: Record<string, any>;
+  availableDates: Record<string, TimeSlot[]>;
+  date: { date: string; timeSlot: TimeSlot } | undefined;
   required: boolean;
-  onDateSelected: (date: Record<string, string>) => void;
+  onDateSelected: (date: { date: string; timeSlot: TimeSlot }) => void;
 }
 
 const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
-  const { date: selectedDate, time: selectedTime } = date ?? {};
+  const { date: selectedDate, timeSlot: selectedTime } = date ?? {};
   const dates = Object.keys(availableDates);
   const times = selectedDate ? availableDates[selectedDate] : [];
 
-  const handleDateChange = (event: any) => {
-    onDateSelected({ date: event.target.value });
+  const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onDateSelected({ date: event.target.value, timeSlot: { date: '', emails: [], endTime: '', startTime: '' } });
   };
 
-  const handleTimeChange = (event: any) => {
-    onDateSelected({ date: selectedDate, time: JSON.parse(event.target.value) });
+  const handleTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (selectedDate) {
+      onDateSelected({ date: selectedDate, timeSlot: JSON.parse(event.target.value) });
+    }
   };
 
-  const formatTime = (t: any) =>
-    `${t.startTime.substring(0, t.startTime.indexOf('+'))}-${t.endTime.substring(0, t.startTime.indexOf('+'))}`;
+  const formatTime = (timeSlot: TimeSlot) =>
+    `${timeSlot.startTime?.substring(0, timeSlot.startTime.indexOf('+'))}-${timeSlot.endTime?.substring(
+      0,
+      timeSlot.startTime?.indexOf('+'),
+    )}`;
 
   return (
     <>

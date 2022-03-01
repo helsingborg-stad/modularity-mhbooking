@@ -1,9 +1,15 @@
 import { useEffect, useState, FormEvent } from 'react';
-import { createBooking, getTimeSlots } from './services/BookingService';
-import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 import moment from 'moment';
+
+import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlots } from './services/BookingService';
+import { getAdministratorsBySharedMailbox } from './services/BookablesService';
+
+import { Confirmation, ConfirmationInterface, ErrorList, Form, Loader } from './components';
+
+import { TimeSlot, FormData } from './types/BookingTypes';
+
 import { consolidateTimeSlots } from './helpers/BookingHelper';
-import { Confirmation, ErrorList, Form, Loader } from './components';
+
 interface BoxContentProps {
   children: React.ReactChild | React.ReactChild[];
 }
@@ -17,41 +23,66 @@ const coerceError = (error: unknown): Error => {
   return typeof error === 'string' ? new Error(error) : (error as Error);
 };
 
+const initialFormData: FormData = {
+  firstname: {
+    value: '',
+  },
+  lastname: {
+    value: '',
+  },
+  email: {
+    value: '',
+  },
+  phone: {
+    value: '',
+  },
+  comment: {
+    value: '',
+  },
+};
+
 function App() {
-  const [availableDates, setAvailableDates] = useState<any>(undefined);
-  const [selectedDate, setSelectedDate] = useState<any>(undefined);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
+  const [selectedDate, setSelectedDate] = useState<{ date: string; timeSlot: TimeSlot }>();
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [confirmationData, setConfirmationData] = useState<ConfirmationInterface>();
   const [status, setStatus] = useState<StatusType>('loading');
   const [errors, setErrors] = useState<string[]>([]);
   const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
 
-  const handleUpdateDate = (date: any) => {
+  const onDateSelected = (date: { date: string; timeSlot: TimeSlot }) => {
     setSelectedDate(date);
   };
-
-  const formToHTML = (form: any) =>
-    form.reduce((prev: string, item: any) => prev + `<p>${item.name}: ${item.value}</p>`, '');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors([]);
-    const { emails, startTime, endTime, date } = selectedDate.time;
-    const startDate = `${date}T${startTime}`;
-    const endDate = `${date}T${endTime}`;
-    const body = formToHTML(Object.values(formAnswers));
     setStatus('sending');
-    try {
-      await createBooking([emails[0]], startDate, endDate, undefined, undefined, 'Volontärsamtal', undefined, body);
-      setStatus('sent');
-    } catch (error: unknown) {
-      setErrors([...errors, coerceError(error)?.message]);
-      setStatus('ready');
+    if (selectedDate?.timeSlot.emails[0]) {
+      const requestData = buildBookingRequest(selectedDate.timeSlot, formData);
+      try {
+        await createBooking(requestData);
+        const administratorDetails = await getAdministratorDetails(selectedDate.timeSlot.emails[0]);
+        setConfirmationData({
+          administratorName: administratorDetails.DisplayName,
+          userEmail: formData.email.value,
+          date: selectedDate.date,
+          startTime: selectedDate.timeSlot.startTime,
+          endTime: selectedDate.timeSlot.endTime,
+        });
+        setStatus('sent');
+      } catch (error: unknown) {
+        setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
+        setStatus('ready');
+      }
     }
   };
 
-  const updateForm = (event: any) => {
+  const updateForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, name } = event.target;
-    setFormAnswers({ ...formAnswers, [id]: { value, name } });
+    setFormData((currentFormData) => {
+      return { ...currentFormData, [id]: { value, name } };
+    });
   };
 
   useEffect(() => {
@@ -73,15 +104,15 @@ function App() {
   const content: Record<StatusType, JSX.Element> = {
     loading: <Loader text="Laddar formulär..." />,
     sending: <Loader text="Skickar..." />,
-    sent: <Confirmation text="Din bokning har skickats" />,
+    sent: <Confirmation {...confirmationData!} />,
     ready: (
       <>
         <ErrorList errors={errors} />
         <Form
           availableDates={availableDates}
-          formAnswers={formAnswers}
+          formData={formData}
           handleSubmit={handleSubmit}
-          handleUpdateDate={handleUpdateDate}
+          onDateSelected={onDateSelected}
           selectedDate={selectedDate}
           updateForm={updateForm}
         />

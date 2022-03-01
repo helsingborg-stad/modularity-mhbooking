@@ -3,7 +3,6 @@ import { Notice } from '.';
 interface ErrorListProps {
   errors: string[];
 }
-
 const ErrorList = ({ errors }: ErrorListProps) => (
   <div>
     {errors.map((error) => {
