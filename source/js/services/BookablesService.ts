@@ -9,8 +9,8 @@ export type BookableItem = {
 
 const getBookables = async (): Promise<BookableItem[]> => {
   const response = await get('/bookables');
-  if (response.status !== 200) {
-    throw new Error(response.message);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `getBookables: Recieved error ${response?.status}`);
   }
   const bookables = response?.data?.data as BookableItem[];
   if (bookables) return bookables;
@@ -19,8 +19,10 @@ const getBookables = async (): Promise<BookableItem[]> => {
 
 const getAdministratorsBySharedMailbox = async (sharedMailbox: string): Promise<string[]> => {
   const response = await get(`/bookables/getAdministratorsByEmail/${sharedMailbox}`);
-  if (response.status !== 200) {
-    throw new Error(response.message);
+  if (response?.status !== 200) {
+    throw new Error(
+      response?.data.data.message || `getAdministratorsBySharedMailbox: Recieved error ${response?.status}`,
+    );
   }
   const admins = response?.data?.data?.attributes;
   if (admins) return admins;

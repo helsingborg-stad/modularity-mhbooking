@@ -20,7 +20,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': ['error'],
     'react/require-default-props': 'off',
     'no-void': ['error', { allowAsStatement: true }],
-    'no-console': 'error',
+    'no-console': 'warn',
     'import/extensions': [
       'error',
       'ignorePackages',

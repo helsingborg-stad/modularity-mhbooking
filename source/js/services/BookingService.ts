@@ -5,8 +5,8 @@ import { get, patch, post, remove } from '../helpers/ApiRequest';
 
 const getBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await get(`/booking/${encodeURIComponent(bookingId)}`);
-  if (response.status !== 200) {
-    throw new Error(response?.message || `getBooking: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `getBooking: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data?.attributes;
@@ -36,8 +36,8 @@ const createBooking = async (
   };
 
   const response = await post('/booking', body);
-  if (response.status !== 200) {
-    throw new Error(response?.message || `createBooking: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `createBooking: Recieved error ${response?.status}`);
   }
 
   const booked = response?.data?.data;
@@ -47,8 +47,8 @@ const createBooking = async (
 
 const cancelBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(bookingId)}`);
-  if (response.status !== 200) {
-    throw new Error(response?.message || `cancelBooking: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `cancelBooking: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data;
@@ -79,8 +79,8 @@ const updateBooking = async (
   };
 
   const response = await patch(`/booking/${encodeURIComponent(bookingId)}`, body);
-  if (response.status !== 200) {
-    throw new Error(response?.message || `updateBooking: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `updateBooking: Recieved error ${response?.status}`);
   }
 
   const booked = response?.data?.data;
@@ -94,8 +94,8 @@ const searchBookings = async (referenceCode: string, startTime: string, endTime:
     startTime,
     endTime,
   });
-  if (response.status !== 200) {
-    throw new Error(response?.message || `searchBookings: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `searchBookings: Recieved error ${response?.status}`);
   }
 
   const bookings = response?.data?.data?.attributes;
@@ -108,8 +108,8 @@ const searchBookings = async (referenceCode: string, startTime: string, endTime:
 
 const getHistoricalAttendees = async (referenceCode: string, startTime: string, endTime: string): Promise<string[]> => {
   const response = await get(`/booking/getHistoricalAttendees/${referenceCode}`, undefined, { startTime, endTime });
-  if (response.status !== 200) {
-    throw new Error(response?.message || `getHistoricalAttendees: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `getHistoricalAttendees: Recieved error ${response?.status}`);
   }
 
   const timeSlots = response?.data?.data?.attributes;
@@ -123,8 +123,9 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
     startTime,
     endTime,
   });
-  if (response.status !== 200) {
-    throw new Error(response?.message || `getTimeSlots: Recieved error ${response.status}`);
+
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `getTimeSlots: Recieved error ${response?.status}`);
   }
 
   const timeSlots = response?.data?.data;
