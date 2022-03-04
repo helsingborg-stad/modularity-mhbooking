@@ -1,23 +1,14 @@
 import { useEffect, useState, FormEvent } from 'react';
-import { createBooking, getTimeSlots } from './services/BookingService';
-import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 import moment from 'moment';
+
+import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlots } from './services/BookingService';
+import { getAdministratorsBySharedMailbox } from './services/BookablesService';
+
+import { Confirmation, ConfirmationInterface, ErrorList, Form, Loader } from './components';
+
+import { TimeSlot, FormData } from './types/BookingTypes';
+
 import { consolidateTimeSlots } from './helpers/BookingHelper';
-import { DatePicker, TextField, Button, Notice } from './components';
-
-interface GridRowProps {
-  children: React.ReactChild | React.ReactChild[];
-  modFormField?: boolean;
-}
-const GridRow = ({ children, modFormField }: GridRowProps) => (
-  <div className={`o-grid${modFormField && ' mod-form-field'}`}>{children}</div>
-);
-
-interface GridElementProps {
-  children: React.ReactChild | React.ReactChild[];
-  width: number;
-}
-const GridElement = ({ children, width }: GridElementProps) => <div className={`o-grid-${width}@md`}>{children}</div>;
 
 interface BoxContentProps {
   children: React.ReactChild | React.ReactChild[];
@@ -32,41 +23,66 @@ const coerceError = (error: unknown): Error => {
   return typeof error === 'string' ? new Error(error) : (error as Error);
 };
 
+const initialFormData: FormData = {
+  firstname: {
+    value: '',
+  },
+  lastname: {
+    value: '',
+  },
+  email: {
+    value: '',
+  },
+  phone: {
+    value: '',
+  },
+  comment: {
+    value: '',
+  },
+};
+
 function App() {
-  const [availableDates, setAvailableDates] = useState<any>(undefined);
-  const [selectedDate, setSelectedDate] = useState<any>(undefined);
-  const [formAnswers, setFormAnswers] = useState<Record<string, any>>({});
+  const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
+  const [selectedDate, setSelectedDate] = useState<{ date: string; timeSlot: TimeSlot }>();
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [confirmationData, setConfirmationData] = useState<ConfirmationInterface>();
   const [status, setStatus] = useState<StatusType>('loading');
   const [errors, setErrors] = useState<string[]>([]);
   const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
 
-  const handleUpdateDate = (date: any) => {
+  const onDateSelected = (date: { date: string; timeSlot: TimeSlot }) => {
     setSelectedDate(date);
   };
-
-  const formToHTML = (form: any) =>
-    form.reduce((prev: string, item: any) => prev + `<p>${item.name}: ${item.value}</p>`, '');
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors([]);
-    const { emails, startTime, endTime, date } = selectedDate.time;
-    const startDate = `${date}T${startTime}`;
-    const endDate = `${date}T${endTime}`;
-    const body = formToHTML(Object.values(formAnswers));
     setStatus('sending');
-    try {
-      await createBooking([emails[0]], startDate, endDate, undefined, undefined, 'Volontärsamtal', undefined, body);
-      setStatus('sent');
-    } catch (error: unknown) {
-      setErrors([...errors, coerceError(error)?.message]);
-      setStatus('ready');
+    if (selectedDate?.timeSlot.emails[0]) {
+      const requestData = buildBookingRequest(selectedDate.timeSlot, formData);
+      try {
+        await createBooking(requestData);
+        const administratorDetails = await getAdministratorDetails(selectedDate.timeSlot.emails[0]);
+        setConfirmationData({
+          administratorName: administratorDetails.DisplayName,
+          userEmail: formData.email.value,
+          date: selectedDate.date,
+          startTime: selectedDate.timeSlot.startTime,
+          endTime: selectedDate.timeSlot.endTime,
+        });
+        setStatus('sent');
+      } catch (error: unknown) {
+        setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
+        setStatus('ready');
+      }
     }
   };
 
-  const updateForm = (event: any) => {
+  const updateForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, name } = event.target;
-    setFormAnswers({ ...formAnswers, [id]: { value, name } });
+    setFormData((currentFormData) => {
+      return { ...currentFormData, [id]: { value, name } };
+    });
   };
 
   useEffect(() => {
@@ -86,107 +102,23 @@ function App() {
   }, []);
 
   const content: Record<StatusType, JSX.Element> = {
-    loading: <p>Laddar formulär...</p>,
-    sending: <p>Skickar...</p>,
-    sent: <p>Din bokning har skickats.</p>,
+    loading: <Loader text="Laddar formulär..." />,
+    sending: <Loader text="Skickar..." />,
+    sent: <Confirmation {...confirmationData!} />,
     ready: (
-      <div className="u-margin__top--1">
-        <div>
-          {errors.map((error) => {
-            return (
-              <Notice key={error} iconName="error" type="danger">
-                {error}
-              </Notice>
-            );
-          })}
-        </div>
-        <form onSubmit={handleSubmit} className="c-form">
-          {/* Date picker */}
-          <GridRow modFormField>
-            <DatePicker
-              availableDates={availableDates}
-              date={selectedDate}
-              onDateSelected={handleUpdateDate}
-              required
-            />
-          </GridRow>
-
-          {/* Name and lastname */}
-          <GridRow modFormField>
-            <GridElement width={6}>
-              <TextField
-                label="Förnamn"
-                id="firstname"
-                onChange={updateForm}
-                value={formAnswers.firstname?.value}
-                type="text"
-                required
-              />
-            </GridElement>
-            <GridElement width={6}>
-              <TextField
-                label="Efternamn"
-                id="lastname"
-                onChange={updateForm}
-                value={formAnswers.lastname?.value}
-                type="text"
-                required
-              />
-            </GridElement>
-          </GridRow>
-
-          {/* Email and phone */}
-          <GridRow modFormField>
-            <GridElement width={6}>
-              <TextField
-                label="E-post"
-                id="email"
-                onChange={updateForm}
-                value={formAnswers.email?.value}
-                type="email"
-                required
-              />
-            </GridElement>
-            <GridElement width={6}>
-              <TextField label="Telefon" id="phone" onChange={updateForm} value={formAnswers.phone?.value} type="tel" />
-            </GridElement>
-          </GridRow>
-
-          {/* Comment */}
-          <GridRow modFormField>
-            <GridElement width={12}>
-              <TextField
-                label="Övrig information"
-                id="comment"
-                onChange={updateForm}
-                value={formAnswers.comment?.value}
-                type="text"
-              />
-            </GridElement>
-          </GridRow>
-
-          {/* Submit button */}
-          <GridRow>
-            <GridElement width={12}>
-              <Button className="u-margin__top--1" type="submit" label="Skicka" />
-            </GridElement>
-          </GridRow>
-        </form>
-      </div>
+      <>
+        <ErrorList errors={errors} />
+        <Form
+          availableDates={availableDates}
+          formData={formData}
+          handleSubmit={handleSubmit}
+          onDateSelected={onDateSelected}
+          selectedDate={selectedDate}
+          updateForm={updateForm}
+        />
+      </>
     ),
-    error: (
-      <div>
-        {errors.map((error) => {
-          return (
-            <div className="u-margin__top--1">
-              <Notice key={error} iconName="error" type="danger">
-                {error}
-              </Notice>
-            </div>
-          );
-        })}
-      </div>
-    ),
+    error: <ErrorList errors={errors} />,
   };
 
   return <BoxContent>{content[status]}</BoxContent>;

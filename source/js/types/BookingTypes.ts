@@ -4,9 +4,9 @@ export type TimeSpan = {
 };
 
 export type TimeSlot = {
-  startTime?: string;
-  endTime?: string;
-  emails?: string[];
+  startTime: string;
+  endTime: string;
+  emails: string[];
   date: string;
 };
 
@@ -43,6 +43,43 @@ export type GraphData = {
     Type: string;
     Status: string;
   }[];
+};
+
+export type AdministratorDetails = {
+  DisplayName: string;
+  Email: string;
+  Department?: string;
+  JobTitle?: string;
+};
+
+export type BookingRequest = {
+  requiredAttendees: string[];
+  startTime: string;
+  endTime: string;
+  date: string;
+  optionalAttendees?: string[];
+  referenceCode?: string;
+  subject?: string;
+  location?: string;
+  message?: string;
+};
+
+export type FormData = {
+  firstname: {
+    value: string;
+  };
+  lastname: {
+    value: string;
+  };
+  email: {
+    value: string;
+  };
+  phone: {
+    value: string;
+  };
+  comment: {
+    value: string;
+  };
 };
 
 export type TimeSlotDataType = Record<string, Record<string, TimeSpan[]>>;
