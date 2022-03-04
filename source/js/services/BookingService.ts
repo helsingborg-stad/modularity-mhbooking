@@ -125,8 +125,8 @@ const getHistoricalAttendees = async (referenceCode: string, startTime: string, 
 };
 
 const getTimeSlots = async (attendees: string[], startTime: string, endTime: string): Promise<TimeSlotDataType> => {
-  const response = await post(`/booking/getTimeSlots`, {
-    attendees,
+  const response = await get(`/booking/getTimeSlots`, undefined, {
+    attendees: JSON.stringify(attendees),
     startTime,
     endTime,
   });
