@@ -3,7 +3,12 @@ interface ButtonInterface {
   label: string;
   type: 'button' | 'submit' | 'reset' | undefined;
 }
-const Button = ({ onClick, label, type, className }: ButtonInterface & React.HTMLAttributes<HTMLButtonElement>) => (
+export const Button = ({
+  onClick,
+  label,
+  type,
+  className,
+}: ButtonInterface & React.HTMLAttributes<HTMLButtonElement>) => (
   <button
     onClick={onClick ? onClick : undefined}
     type={type}
@@ -13,5 +18,3 @@ const Button = ({ onClick, label, type, className }: ButtonInterface & React.HTM
     </span>
   </button>
 );
-
-export default Button;

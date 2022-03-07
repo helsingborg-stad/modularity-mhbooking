@@ -1,8 +1,8 @@
 import { FormEventHandler } from 'react';
 
-import { Button, DatePicker, GridElement, GridRow, TextField } from '.';
+import { Button, DatePicker, GridElement, GridRow, TextField } from '..';
 
-import { TimeSlot, FormData } from '../types/BookingTypes';
+import { TimeSlot, FormData } from '../../types/BookingTypes';
 
 interface FormInterface {
   availableDates: Record<string, TimeSlot[]>;
@@ -12,7 +12,14 @@ interface FormInterface {
   updateForm: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: FormEventHandler<HTMLFormElement>;
 }
-const Form = ({ handleSubmit, availableDates, selectedDate, onDateSelected, updateForm, formData }: FormInterface) => (
+export const Form = ({
+  handleSubmit,
+  availableDates,
+  selectedDate,
+  onDateSelected,
+  updateForm,
+  formData,
+}: FormInterface) => (
   <div className="u-margin__top--1">
     <form onSubmit={handleSubmit} className="c-form">
       {/* Date picker */}
@@ -83,5 +90,3 @@ const Form = ({ handleSubmit, availableDates, selectedDate, onDateSelected, upda
     </form>
   </div>
 );
-
-export default Form;

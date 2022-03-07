@@ -4,7 +4,7 @@ interface NoticeProps {
   type: 'success' | 'info' | 'danger' | 'warning';
 }
 
-const Notice = ({ children, iconName, type = 'info' }: NoticeProps) => (
+export const Notice = ({ children, iconName, type = 'info' }: NoticeProps) => (
   <div className={`u-margin__bottom--1 c-notice c-notice--${type}`}>
     <span className="c-notice__icon">
       <i className="c-icon c-icon--size-md material-icons" translate="no" role="img">
@@ -14,5 +14,3 @@ const Notice = ({ children, iconName, type = 'info' }: NoticeProps) => (
     <span className="c-notice__message">{children}</span>
   </div>
 );
-
-export default Notice;

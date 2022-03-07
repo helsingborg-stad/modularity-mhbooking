@@ -1,5 +1,5 @@
-import { formatTimePeriod } from '../helpers/BookingHelper';
-import { TimeSlot } from '../types/BookingTypes';
+import { formatTimePeriod } from '../../helpers/BookingHelper';
+import { TimeSlot } from '../../types/BookingTypes';
 
 interface DatePickerInterface {
   availableDates: Record<string, TimeSlot[]>;
@@ -8,7 +8,7 @@ interface DatePickerInterface {
   onDateSelected: (date: { date: string; timeSlot: TimeSlot }) => void;
 }
 
-const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
+export const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
   const { date: selectedDate, timeSlot: selectedTime } = date ?? {};
   const dates = Object.keys(availableDates);
   const times = selectedDate ? availableDates[selectedDate] : [];
@@ -73,5 +73,3 @@ const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePick
     </>
   );
 };
-
-export default DatePicker;

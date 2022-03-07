@@ -1,4 +1,4 @@
-import { formatTimePeriod } from '../helpers/BookingHelper';
+import { formatTimePeriod } from '../../helpers/BookingHelper';
 
 export interface ConfirmationInterface {
   administratorName: string;
@@ -7,7 +7,7 @@ export interface ConfirmationInterface {
   startTime: string;
   endTime: string;
 }
-const Confirmation = ({ administratorName, userEmail, date, startTime, endTime }: ConfirmationInterface) => (
+export const Confirmation = ({ administratorName, userEmail, date, startTime, endTime }: ConfirmationInterface) => (
   <div>
     <p className="c-typography__variant--h1">Tack för din bokning!</p>
     <p>Du har bokat tid med {administratorName} följande tid:</p>
@@ -17,5 +17,3 @@ const Confirmation = ({ administratorName, userEmail, date, startTime, endTime }
     <p>En bokningsbekräftelse har skickats till {userEmail}</p>
   </div>
 );
-
-export default Confirmation;

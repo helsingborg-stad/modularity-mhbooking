@@ -3,8 +3,6 @@ interface GridRowProps {
   modFormField?: boolean;
 }
 
-const GridRow = ({ children, modFormField }: GridRowProps) => (
+export const GridRow = ({ children, modFormField }: GridRowProps) => (
   <div className={`o-grid${modFormField && ' mod-form-field'}`}>{children}</div>
 );
-
-export default GridRow;
