@@ -7,7 +7,13 @@ export interface ConfirmationInterface {
   startTime: string;
   endTime: string;
 }
-export const Confirmation = ({ administratorName, userEmail, date, startTime, endTime }: ConfirmationInterface) => (
+export const Confirmation = ({
+  administratorName,
+  userEmail,
+  date = '',
+  startTime = '',
+  endTime = '',
+}: ConfirmationInterface) => (
   <div>
     <p className="c-typography__variant--h1">Tack för din bokning!</p>
     <p>Du har bokat tid med {administratorName} följande tid:</p>
