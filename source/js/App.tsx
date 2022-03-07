@@ -4,7 +4,18 @@ import moment from 'moment';
 import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlots } from './services/BookingService';
 import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 
-import { Confirmation, ConfirmationInterface, ErrorList, Form, Loader } from './components';
+import {
+  Button,
+  Confirmation,
+  ConfirmationInterface,
+  DatePicker,
+  ErrorList,
+  Form,
+  GridElement,
+  GridRow,
+  Loader,
+  TextField,
+} from './components';
 
 import { TimeSlot, FormData } from './types/BookingTypes';
 
@@ -106,17 +117,75 @@ function App() {
     sending: <Loader text="Skickar..." />,
     sent: <Confirmation {...confirmationData!} />,
     ready: (
-      <>
+      <Form handleSubmit={handleSubmit}>
         <ErrorList errors={errors} />
-        <Form
-          availableDates={availableDates}
-          formData={formData}
-          handleSubmit={handleSubmit}
-          onDateSelected={onDateSelected}
-          selectedDate={selectedDate}
-          updateForm={updateForm}
-        />
-      </>
+
+        {/* Date picker */}
+        <GridRow modFormField>
+          <DatePicker availableDates={availableDates} date={selectedDate} onDateSelected={onDateSelected} required />
+        </GridRow>
+
+        {/* Name and lastname */}
+        <GridRow modFormField>
+          <GridElement width={6}>
+            <TextField
+              label="Förnamn"
+              id="firstname"
+              onChange={updateForm}
+              value={formData.firstname?.value}
+              type="text"
+              required
+            />
+          </GridElement>
+          <GridElement width={6}>
+            <TextField
+              label="Efternamn"
+              id="lastname"
+              onChange={updateForm}
+              value={formData.lastname?.value}
+              type="text"
+              required
+            />
+          </GridElement>
+        </GridRow>
+
+        {/* Email and phone */}
+        <GridRow modFormField>
+          <GridElement width={6}>
+            <TextField
+              label="E-post"
+              id="email"
+              onChange={updateForm}
+              value={formData.email?.value}
+              type="email"
+              required
+            />
+          </GridElement>
+          <GridElement width={6}>
+            <TextField label="Telefon" id="phone" onChange={updateForm} value={formData.phone?.value} type="tel" />
+          </GridElement>
+        </GridRow>
+
+        {/* Comment */}
+        <GridRow modFormField>
+          <GridElement width={12}>
+            <TextField
+              label="Övrig information"
+              id="comment"
+              onChange={updateForm}
+              value={formData.comment?.value}
+              type="text"
+            />
+          </GridElement>
+        </GridRow>
+
+        {/* Submit button */}
+        <GridRow>
+          <GridElement width={12}>
+            <Button className="u-margin__top--2" type="submit" label="Skicka" />
+          </GridElement>
+        </GridRow>
+      </Form>
     ),
     error: <ErrorList errors={errors} />,
   };
