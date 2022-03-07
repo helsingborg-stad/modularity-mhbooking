@@ -142,8 +142,8 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
 
 const getAdministratorDetails = async (email: string): Promise<AdministratorDetails> => {
   const response = await get(`/booking/getAdministratorDetails/${email}`);
-  if (response.status !== 200) {
-    throw new Error(response?.message || `getAdministratorDetails: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `getAdministratorDetails: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data?.attributes;
