@@ -22,7 +22,8 @@ const getBooking = async (bookingId: string): Promise<Record<string, unknown>> =
 };
 
 const createBooking = async ({
-  requiredAttendees,
+  organizationRequiredAttendees,
+  externalRequiredAttendees,
   startTime,
   endTime,
   optionalAttendees,
@@ -32,7 +33,8 @@ const createBooking = async ({
   message,
 }: BookingRequest): Promise<Record<string, unknown>> => {
   const body = {
-    requiredAttendees,
+    organizationRequiredAttendees,
+    externalRequiredAttendees,
     startTime,
     endTime,
     optionalAttendees,
@@ -156,7 +158,8 @@ const formToHTML = (form: any) =>
 
 const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
   return {
-    requiredAttendees: [...timeSlot.emails],
+    organizationRequiredAttendees: [...timeSlot.emails],
+    externalRequiredAttendees: [formData.email.value],
     date: timeSlot.date,
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
     startTime: `${timeSlot.date}T${timeSlot.startTime}`,
