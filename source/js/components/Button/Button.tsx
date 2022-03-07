@@ -1,7 +1,8 @@
+export type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 interface ButtonInterface {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   label: string;
-  type: 'button' | 'submit' | 'reset' | undefined;
+  type: ButtonType;
 }
 export const Button = ({
   onClick,
