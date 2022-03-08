@@ -96,8 +96,19 @@ const getReferenceCodeForUser = (user: Record<string, string>): string => {
   return `MH${code.toString()}`;
 };
 
+const toLocaleTimeString = (value: string) => {
+  return new Date(value).toLocaleTimeString();
+};
+
+const formatTimePeriod = (dateString: string, startTime: string, endTime: string) => {
+  const startTimeString = toLocaleTimeString(`${dateString}T${startTime}`);
+  const endTimeString = toLocaleTimeString(`${dateString}T${endTime}`);
+
+  return `${startTimeString}-${endTimeString}`;
+};
+
 export {
-  // formDataToQuestions,
+  formatTimePeriod,
   consolidateTimeSlots,
   convertGraphDataToBookingItem,
   getReferenceCodeForUser,

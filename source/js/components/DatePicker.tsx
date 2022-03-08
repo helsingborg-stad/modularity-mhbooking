@@ -1,3 +1,4 @@
+import { formatTimePeriod } from '../helpers/BookingHelper';
 import { TimeSlot } from '../types/BookingTypes';
 
 interface DatePickerInterface {
@@ -21,12 +22,6 @@ const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePick
       onDateSelected({ date: selectedDate, timeSlot: JSON.parse(event.target.value) });
     }
   };
-
-  const formatTime = (timeSlot: TimeSlot) =>
-    `${timeSlot.startTime?.substring(0, timeSlot.startTime.indexOf('+'))}-${timeSlot.endTime?.substring(
-      0,
-      timeSlot.startTime?.indexOf('+'),
-    )}`;
 
   return (
     <>
@@ -69,7 +64,7 @@ const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePick
             </option>
             {times.map((time) => (
               <option value={JSON.stringify(time)} key={JSON.stringify(time)}>
-                {formatTime(time)}
+                {formatTimePeriod(time.date, time.startTime, time.endTime)}
               </option>
             ))}
           </select>
