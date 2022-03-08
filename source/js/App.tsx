@@ -21,7 +21,13 @@ import { TimeSlot, FormData } from './types/BookingTypes';
 
 import { consolidateTimeSlots } from './helpers/BookingHelper';
 
-type StatusType = 'loading' | 'ready' | 'sending' | 'sent' | 'error';
+enum StatusType {
+  loading,
+  ready,
+  sending,
+  sent,
+  error,
+}
 
 const coerceError = (error: unknown): Error => {
   return typeof error === 'string' ? new Error(error) : (error as Error);
@@ -50,7 +56,7 @@ function App() {
   const [selectedDate, setSelectedDate] = useState<{ date: string; timeSlot: TimeSlot }>();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [administratorName, setAdministratorName] = useState<string>('');
-  const [status, setStatus] = useState<StatusType>('loading');
+  const [status, setStatus] = useState<StatusType>(StatusType.loading);
   const [errors, setErrors] = useState<string[]>([]);
   const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
 
@@ -61,17 +67,17 @@ function App() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors([]);
-    setStatus('sending');
+    setStatus(StatusType.sending);
     if (selectedDate?.timeSlot.emails[0]) {
       const requestData = buildBookingRequest(selectedDate.timeSlot, formData);
       try {
         await createBooking(requestData);
         const administratorDetails = await getAdministratorDetails(selectedDate.timeSlot.emails[0]);
         setAdministratorName(administratorDetails.DisplayName);
-        setStatus('sent');
+        setStatus(StatusType.sent);
       } catch (error: unknown) {
         setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
-        setStatus('ready');
+        setStatus(StatusType.ready);
       }
     }
   };
@@ -90,19 +96,19 @@ function App() {
         const timeSlotData = await getTimeSlots(emailsResponse, moment().format(), moment().add(6, 'months').format());
         const dates = consolidateTimeSlots(timeSlotData);
         setAvailableDates(dates);
-        setStatus('ready');
+        setStatus(StatusType.ready);
       } catch (error: unknown) {
         setErrors((state) => [...state, coerceError(error)?.message]);
-        setStatus('error');
+        setStatus(StatusType.error);
       }
     };
     void fetchData();
   }, []);
 
   const content: Record<StatusType, JSX.Element> = {
-    loading: <Loader text="Laddar formulär..." />,
-    sending: <Loader text="Skickar..." />,
-    sent: (
+    [StatusType.loading]: <Loader text="Laddar formulär..." />,
+    [StatusType.sending]: <Loader text="Skickar..." />,
+    [StatusType.sent]: (
       <Confirmation
         administratorName={administratorName}
         userEmail={formData.email.value}
@@ -111,7 +117,7 @@ function App() {
         endTime={selectedDate?.timeSlot.endTime}
       />
     ),
-    ready: (
+    [StatusType.ready]: (
       <Form handleSubmit={handleSubmit}>
         <ErrorList errors={errors} />
 
@@ -182,7 +188,7 @@ function App() {
         </GridRow>
       </Form>
     ),
-    error: <ErrorList errors={errors} />,
+    [StatusType.error]: <ErrorList errors={errors} />,
   };
 
   return <BoxContent>{content[status]}</BoxContent>;
