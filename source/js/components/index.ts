@@ -8,3 +8,4 @@ export * from './GridRow';
 export * from './GridElement';
 export * from './ErrorList';
 export * from './Loader';
+export * from './BoxContent';

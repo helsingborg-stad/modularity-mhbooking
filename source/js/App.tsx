@@ -5,6 +5,7 @@ import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlo
 import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 
 import {
+  BoxContent,
   Button,
   Confirmation,
   ConfirmationInterface,
@@ -20,13 +21,6 @@ import {
 import { TimeSlot, FormData } from './types/BookingTypes';
 
 import { consolidateTimeSlots } from './helpers/BookingHelper';
-
-interface BoxContentProps {
-  children: React.ReactChild | React.ReactChild[];
-}
-const BoxContent = ({ children }: BoxContentProps) => (
-  <div className="box-content modularity-validation mod-form">{children}</div>
-);
 
 type StatusType = 'loading' | 'ready' | 'sending' | 'sent' | 'error';
 
