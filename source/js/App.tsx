@@ -8,7 +8,6 @@ import {
   BoxContent,
   Button,
   Confirmation,
-  ConfirmationInterface,
   DatePicker,
   ErrorList,
   Form,
@@ -50,7 +49,7 @@ function App() {
   const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
   const [selectedDate, setSelectedDate] = useState<{ date: string; timeSlot: TimeSlot }>();
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [confirmationData, setConfirmationData] = useState<ConfirmationInterface>();
+  const [administratorName, setAdministratorName] = useState<string>('');
   const [status, setStatus] = useState<StatusType>('loading');
   const [errors, setErrors] = useState<string[]>([]);
   const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
@@ -68,13 +67,7 @@ function App() {
       try {
         await createBooking(requestData);
         const administratorDetails = await getAdministratorDetails(selectedDate.timeSlot.emails[0]);
-        setConfirmationData({
-          administratorName: administratorDetails.DisplayName,
-          userEmail: formData.email.value,
-          date: selectedDate.date,
-          startTime: selectedDate.timeSlot.startTime,
-          endTime: selectedDate.timeSlot.endTime,
-        });
+        setAdministratorName(administratorDetails.DisplayName);
         setStatus('sent');
       } catch (error: unknown) {
         setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
@@ -109,7 +102,15 @@ function App() {
   const content: Record<StatusType, JSX.Element> = {
     loading: <Loader text="Laddar formulär..." />,
     sending: <Loader text="Skickar..." />,
-    sent: <Confirmation {...confirmationData!} />,
+    sent: (
+      <Confirmation
+        administratorName={administratorName}
+        userEmail={formData.email.value}
+        date={selectedDate?.date}
+        startTime={selectedDate?.timeSlot.startTime}
+        endTime={selectedDate?.timeSlot.endTime}
+      />
+    ),
     ready: (
       <Form handleSubmit={handleSubmit}>
         <ErrorList errors={errors} />

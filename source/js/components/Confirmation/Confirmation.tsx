@@ -3,9 +3,9 @@ import { formatTimePeriod } from '../../helpers/BookingHelper';
 export interface ConfirmationInterface {
   administratorName: string;
   userEmail: string;
-  date: string;
-  startTime: string;
-  endTime: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
 }
 export const Confirmation = ({
   administratorName,
