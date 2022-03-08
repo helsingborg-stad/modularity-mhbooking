@@ -22,7 +22,8 @@ const getBooking = async (bookingId: string): Promise<Record<string, unknown>> =
 };
 
 const createBooking = async ({
-  requiredAttendees,
+  organizationRequiredAttendees,
+  externalRequiredAttendees,
   startTime,
   endTime,
   optionalAttendees,
@@ -32,7 +33,8 @@ const createBooking = async ({
   message,
 }: BookingRequest): Promise<Record<string, unknown>> => {
   const body = {
-    requiredAttendees,
+    organizationRequiredAttendees,
+    externalRequiredAttendees,
     startTime,
     endTime,
     optionalAttendees,
@@ -142,8 +144,8 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
 
 const getAdministratorDetails = async (email: string): Promise<AdministratorDetails> => {
   const response = await get(`/booking/getAdministratorDetails/${email}`);
-  if (response.status !== 200) {
-    throw new Error(response?.message || `getAdministratorDetails: Recieved error ${response.status}`);
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.message || `getAdministratorDetails: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data?.attributes;
@@ -156,7 +158,8 @@ const formToHTML = (form: any) =>
 
 const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
   return {
-    requiredAttendees: [...timeSlot.emails],
+    organizationRequiredAttendees: [...timeSlot.emails],
+    externalRequiredAttendees: [formData.email.value],
     date: timeSlot.date,
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
     startTime: `${timeSlot.date}T${timeSlot.startTime}`,

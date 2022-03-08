@@ -53,7 +53,8 @@ export type AdministratorDetails = {
 };
 
 export type BookingRequest = {
-  requiredAttendees: string[];
+  organizationRequiredAttendees: string[];
+  externalRequiredAttendees: string[];
   startTime: string;
   endTime: string;
   date: string;
