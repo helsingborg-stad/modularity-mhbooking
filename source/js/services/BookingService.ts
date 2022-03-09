@@ -21,29 +21,7 @@ const getBooking = async (bookingId: string): Promise<Record<string, unknown>> =
   throw new Error('getBooking: Response does not contain data.data.attributes');
 };
 
-const createBooking = async ({
-  organizationRequiredAttendees,
-  externalRequiredAttendees,
-  startTime,
-  endTime,
-  optionalAttendees,
-  referenceCode,
-  subject,
-  location,
-  message,
-}: BookingRequest): Promise<Record<string, unknown>> => {
-  const body = {
-    organizationRequiredAttendees,
-    externalRequiredAttendees,
-    startTime,
-    endTime,
-    optionalAttendees,
-    referenceCode,
-    location,
-    body: `<body><p>Du har fått en bokning. Klicka på Acceptera för att bekräfta bokningen.</p>${message}</body>`,
-    subject: subject || 'Mitt Helsingborg bokning',
-  };
-
+const createBooking = async (body: BookingRequest): Promise<Record<string, unknown>> => {
   const response = await post('/booking', body);
   if (response?.status !== 200) {
     throw new Error(response?.data.data.message || `createBooking: Recieved error ${response?.status}`);
@@ -153,8 +131,18 @@ const getAdministratorDetails = async (email: string): Promise<AdministratorDeta
   throw new Error('getAdministratorDetails: Response does not contain data.data.attributes');
 };
 
-const formToHTML = (form: any) =>
-  form.reduce((prev: string, item: any) => prev + `<p>${item.name}: ${item.value}</p>`, '');
+const parseFormValue = (value: string | boolean): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+  return value ? 'Ja' : 'Nej';
+};
+
+const formToHTML = (form: FormData) => {
+  return Object.values(form)
+    .filter((item) => item.name)
+    .reduce((prev: string, item: any) => prev + `<p>${item.name}: ${parseFormValue(item.value)}</p>`, '');
+};
 
 const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
   return {
@@ -164,7 +152,10 @@ const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingReq
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
     startTime: `${timeSlot.date}T${timeSlot.startTime}`,
     subject: 'Volontärsamtal',
-    message: formToHTML(Object.values(formData)),
+    body: `<body><p>Du har fått en bokning. Klicka på Acceptera för att bekräfta bokningen.</p>${formToHTML(
+      formData,
+    )}</body>`,
+    remoteMeeting: formData.remoteMeeting.value,
   };
 };
 
