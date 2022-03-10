@@ -8,6 +8,7 @@ it('renders the checkbox with label text', () => {
 
   expect(container).toHaveTextContent('MyLabel');
 });
+
 it('propagates checked prop set to "true"', () => {
   const handleChange = jest.fn();
 
@@ -18,6 +19,7 @@ it('propagates checked prop set to "true"', () => {
 
   expect(container.querySelector('input')!).toBeChecked();
 });
+
 it('propagates checked prop set to "false"', () => {
   const handleChange = jest.fn();
 
@@ -28,6 +30,7 @@ it('propagates checked prop set to "false"', () => {
 
   expect(container.querySelector('input')!).not.toBeChecked();
 });
+
 it('calls the onChange prop when clicked', () => {
   const handleChange = jest.fn();
 

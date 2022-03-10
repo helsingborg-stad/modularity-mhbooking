@@ -36,6 +36,7 @@ const formDataMock = (): FormData => {
     },
   };
 };
+
 describe('buildBookingRequest ', () => {
   it('transforms remoteMeeting value to "Nej" when given false', () => {
     const formData = formDataMock();
@@ -47,6 +48,7 @@ describe('buildBookingRequest ', () => {
       '<body><p>Du har fått en bokning. Klicka på Acceptera för att bekräfta bokningen.</p><p>Förnamn: Test</p><p>Efternamn: Test</p><p>Email: user@test.se</p><p>Telefon: 123456</p><p>Övrigt: No comment</p><p>Jag vill ansluta digitalt: Nej</p></body>',
     );
   });
+
   it('transforms remoteMeeting value to "Ja" when given true', () => {
     const formData = formDataMock();
     formData.remoteMeeting.value = true;
@@ -57,6 +59,7 @@ describe('buildBookingRequest ', () => {
       '<body><p>Du har fått en bokning. Klicka på Acceptera för att bekräfta bokningen.</p><p>Förnamn: Test</p><p>Efternamn: Test</p><p>Email: user@test.se</p><p>Telefon: 123456</p><p>Övrigt: No comment</p><p>Jag vill ansluta digitalt: Ja</p></body>',
     );
   });
+
   it('does not include value in body when name is undefined', () => {
     const formData = formDataMock();
     formData.comment.name = undefined;
