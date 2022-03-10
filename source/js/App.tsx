@@ -4,20 +4,30 @@ import moment from 'moment';
 import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlots } from './services/BookingService';
 import { getAdministratorsBySharedMailbox } from './services/BookablesService';
 
-import { Confirmation, ConfirmationInterface, ErrorList, Form, Loader } from './components';
+import {
+  BoxContent,
+  Button,
+  Confirmation,
+  DatePicker,
+  ErrorList,
+  Form,
+  GridElement,
+  GridRow,
+  Loader,
+  TextField,
+} from './components';
 
 import { TimeSlot, FormData } from './types/BookingTypes';
 
 import { consolidateTimeSlots } from './helpers/BookingHelper';
 
-interface BoxContentProps {
-  children: React.ReactChild | React.ReactChild[];
+enum StatusType {
+  loading,
+  ready,
+  sending,
+  sent,
+  error,
 }
-const BoxContent = ({ children }: BoxContentProps) => (
-  <div className="box-content modularity-validation mod-form">{children}</div>
-);
-
-type StatusType = 'loading' | 'ready' | 'sending' | 'sent' | 'error';
 
 const coerceError = (error: unknown): Error => {
   return typeof error === 'string' ? new Error(error) : (error as Error);
@@ -45,8 +55,8 @@ function App() {
   const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
   const [selectedDate, setSelectedDate] = useState<{ date: string; timeSlot: TimeSlot }>();
   const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [confirmationData, setConfirmationData] = useState<ConfirmationInterface>();
-  const [status, setStatus] = useState<StatusType>('loading');
+  const [administratorName, setAdministratorName] = useState<string>('');
+  const [status, setStatus] = useState<StatusType>(StatusType.loading);
   const [errors, setErrors] = useState<string[]>([]);
   const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
 
@@ -57,23 +67,17 @@ function App() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors([]);
-    setStatus('sending');
+    setStatus(StatusType.sending);
     if (selectedDate?.timeSlot.emails[0]) {
       const requestData = buildBookingRequest(selectedDate.timeSlot, formData);
       try {
         await createBooking(requestData);
         const administratorDetails = await getAdministratorDetails(selectedDate.timeSlot.emails[0]);
-        setConfirmationData({
-          administratorName: administratorDetails.DisplayName,
-          userEmail: formData.email.value,
-          date: selectedDate.date,
-          startTime: selectedDate.timeSlot.startTime,
-          endTime: selectedDate.timeSlot.endTime,
-        });
-        setStatus('sent');
+        setAdministratorName(administratorDetails.DisplayName);
+        setStatus(StatusType.sent);
       } catch (error: unknown) {
         setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
-        setStatus('ready');
+        setStatus(StatusType.ready);
       }
     }
   };
@@ -92,33 +96,99 @@ function App() {
         const timeSlotData = await getTimeSlots(emailsResponse, moment().format(), moment().add(6, 'months').format());
         const dates = consolidateTimeSlots(timeSlotData);
         setAvailableDates(dates);
-        setStatus('ready');
+        setStatus(StatusType.ready);
       } catch (error: unknown) {
         setErrors((state) => [...state, coerceError(error)?.message]);
-        setStatus('error');
+        setStatus(StatusType.error);
       }
     };
     void fetchData();
   }, []);
 
   const content: Record<StatusType, JSX.Element> = {
-    loading: <Loader text="Laddar formulär..." />,
-    sending: <Loader text="Skickar..." />,
-    sent: <Confirmation {...confirmationData!} />,
-    ready: (
-      <>
-        <ErrorList errors={errors} />
-        <Form
-          availableDates={availableDates}
-          formData={formData}
-          handleSubmit={handleSubmit}
-          onDateSelected={onDateSelected}
-          selectedDate={selectedDate}
-          updateForm={updateForm}
-        />
-      </>
+    [StatusType.loading]: <Loader text="Laddar formulär..." />,
+    [StatusType.sending]: <Loader text="Skickar..." />,
+    [StatusType.sent]: (
+      <Confirmation
+        administratorName={administratorName}
+        userEmail={formData.email.value}
+        date={selectedDate?.date}
+        startTime={selectedDate?.timeSlot.startTime}
+        endTime={selectedDate?.timeSlot.endTime}
+      />
     ),
-    error: <ErrorList errors={errors} />,
+    [StatusType.ready]: (
+      <Form handleSubmit={handleSubmit}>
+        <ErrorList errors={errors} />
+
+        {/* Date picker */}
+        <GridRow modFormField>
+          <DatePicker availableDates={availableDates} date={selectedDate} onDateSelected={onDateSelected} required />
+        </GridRow>
+
+        {/* Name and lastname */}
+        <GridRow modFormField>
+          <GridElement width={6}>
+            <TextField
+              label="Förnamn"
+              id="firstname"
+              onChange={updateForm}
+              value={formData.firstname?.value}
+              type="text"
+              required
+            />
+          </GridElement>
+          <GridElement width={6}>
+            <TextField
+              label="Efternamn"
+              id="lastname"
+              onChange={updateForm}
+              value={formData.lastname?.value}
+              type="text"
+              required
+            />
+          </GridElement>
+        </GridRow>
+
+        {/* Email and phone */}
+        <GridRow modFormField>
+          <GridElement width={6}>
+            <TextField
+              label="E-post"
+              id="email"
+              onChange={updateForm}
+              value={formData.email?.value}
+              type="email"
+              required
+            />
+          </GridElement>
+          <GridElement width={6}>
+            <TextField label="Telefon" id="phone" onChange={updateForm} value={formData.phone?.value} type="tel" />
+          </GridElement>
+        </GridRow>
+
+        {/* Comment */}
+        <GridRow modFormField>
+          <GridElement width={12}>
+            <TextField
+              label="Övrig information"
+              id="comment"
+              onChange={updateForm}
+              value={formData.comment?.value}
+              type="text"
+            />
+          </GridElement>
+        </GridRow>
+
+        {/* Submit button */}
+        <GridRow>
+          <GridElement width={12}>
+            <Button className="u-margin__top--2" type="submit" label="Skicka" />
+          </GridElement>
+        </GridRow>
+      </Form>
+    ),
+    [StatusType.error]: <ErrorList errors={errors} />,
   };
 
   return <BoxContent>{content[status]}</BoxContent>;

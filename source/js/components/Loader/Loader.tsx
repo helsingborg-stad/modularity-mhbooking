@@ -1,7 +1,7 @@
 interface LoaderProps {
   text: string;
 }
-const Loader = ({ text }: LoaderProps) => {
+export const Loader = ({ text }: LoaderProps) => {
   return (
     <div className="u-display--flex u-flex-direction--column u-align-items--center u-padding__top--10 u-padding__bottom--10">
       <div
@@ -12,5 +12,3 @@ const Loader = ({ text }: LoaderProps) => {
     </div>
   );
 };
-
-export default Loader;

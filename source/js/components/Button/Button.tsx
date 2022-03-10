@@ -1,9 +1,15 @@
+export type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 interface ButtonInterface {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   label: string;
-  type: 'button' | 'submit' | 'reset' | undefined;
+  type: ButtonType;
 }
-const Button = ({ onClick, label, type, className }: ButtonInterface & React.HTMLAttributes<HTMLButtonElement>) => (
+export const Button = ({
+  onClick,
+  label,
+  type,
+  className,
+}: ButtonInterface & React.HTMLAttributes<HTMLButtonElement>) => (
   <button
     onClick={onClick ? onClick : undefined}
     type={type}
@@ -13,5 +19,3 @@ const Button = ({ onClick, label, type, className }: ButtonInterface & React.HTM
     </span>
   </button>
 );
-
-export default Button;

@@ -1,9 +1,9 @@
-import { Notice } from '.';
+import { Notice } from '..';
 
 interface ErrorListProps {
   errors: string[];
 }
-const ErrorList = ({ errors }: ErrorListProps) => (
+export const ErrorList = ({ errors }: ErrorListProps) => (
   <div>
     {errors.map((error) => {
       return (
@@ -16,5 +16,3 @@ const ErrorList = ({ errors }: ErrorListProps) => (
     })}
   </div>
 );
-
-export default ErrorList;
