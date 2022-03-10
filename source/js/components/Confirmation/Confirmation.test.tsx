@@ -28,7 +28,7 @@ it('informs user on who to meet', () => {
 it('informs user about time and date', () => {
   const { getByText } = render(<Confirmation {...mockedProps} />);
 
-  const element = getByText(/09:00:00-10:00:00 den 2022-03-07/i);
+  const element = getByText(/09:00-10:00 den 2022-03-07/i);
 
   expect(element).toBeVisible();
 });
