@@ -9,3 +9,4 @@ export * from './GridElement';
 export * from './ErrorList';
 export * from './Loader';
 export * from './BoxContent';
+export * from './Checkbox';

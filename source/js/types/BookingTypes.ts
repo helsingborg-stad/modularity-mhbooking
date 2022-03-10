@@ -58,28 +58,38 @@ export type BookingRequest = {
   startTime: string;
   endTime: string;
   date: string;
+  remoteMeeting: boolean;
   optionalAttendees?: string[];
   referenceCode?: string;
   subject?: string;
   location?: string;
-  message?: string;
+  body?: string;
 };
 
 export type FormData = {
   firstname: {
     value: string;
+    name?: string;
   };
   lastname: {
     value: string;
+    name?: string;
   };
   email: {
     value: string;
+    name?: string;
   };
   phone: {
     value: string;
+    name?: string;
   };
   comment: {
     value: string;
+    name?: string;
+  };
+  remoteMeeting: {
+    value: boolean;
+    name?: string;
   };
 };
 

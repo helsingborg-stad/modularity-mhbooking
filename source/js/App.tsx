@@ -8,6 +8,7 @@ import {
   BoxContent,
   Button,
   Confirmation,
+  Checkbox,
   DatePicker,
   ErrorList,
   Form,
@@ -49,6 +50,9 @@ const initialFormData: FormData = {
   comment: {
     value: '',
   },
+  remoteMeeting: {
+    value: false,
+  },
 };
 
 function App() {
@@ -82,10 +86,17 @@ function App() {
     }
   };
 
-  const updateForm = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value, name } = event.target;
     setFormData((currentFormData) => {
       return { ...currentFormData, [id]: { value, name } };
+    });
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, checked, name } = event.target;
+    setFormData((currentFormData) => {
+      return { ...currentFormData, [id]: { value: checked, name } };
     });
   };
 
@@ -132,7 +143,7 @@ function App() {
             <TextField
               label="Förnamn"
               id="firstname"
-              onChange={updateForm}
+              onChange={handleTextFieldChange}
               value={formData.firstname?.value}
               type="text"
               required
@@ -142,7 +153,7 @@ function App() {
             <TextField
               label="Efternamn"
               id="lastname"
-              onChange={updateForm}
+              onChange={handleTextFieldChange}
               value={formData.lastname?.value}
               type="text"
               required
@@ -156,14 +167,20 @@ function App() {
             <TextField
               label="E-post"
               id="email"
-              onChange={updateForm}
+              onChange={handleTextFieldChange}
               value={formData.email?.value}
               type="email"
               required
             />
           </GridElement>
           <GridElement width={6}>
-            <TextField label="Telefon" id="phone" onChange={updateForm} value={formData.phone?.value} type="tel" />
+            <TextField
+              label="Telefon"
+              id="phone"
+              onChange={handleTextFieldChange}
+              value={formData.phone?.value}
+              type="tel"
+            />
           </GridElement>
         </GridRow>
 
@@ -173,9 +190,20 @@ function App() {
             <TextField
               label="Övrig information"
               id="comment"
-              onChange={updateForm}
+              onChange={handleTextFieldChange}
               value={formData.comment?.value}
               type="text"
+            />
+          </GridElement>
+        </GridRow>
+
+        <GridRow modFormField>
+          <GridElement width={12}>
+            <Checkbox
+              label="Jag vill ansluta till mötet digitalt"
+              id="remoteMeeting"
+              onChange={handleCheckboxChange}
+              checked={formData.remoteMeeting.value}
             />
           </GridElement>
         </GridRow>
@@ -183,7 +211,7 @@ function App() {
         {/* Submit button */}
         <GridRow>
           <GridElement width={12}>
-            <Button className="u-margin__top--2" type="submit" label="Skicka" />
+            <Button className="u-margin__top--5" type="submit" label="Skicka" />
           </GridElement>
         </GridRow>
       </Form>
