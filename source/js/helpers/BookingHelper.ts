@@ -97,12 +97,12 @@ const getReferenceCodeForUser = (user: Record<string, string>): string => {
 };
 
 const toLocaleTimeString = (value: string) => {
-  return new Date(value).toLocaleTimeString();
+  return new Date(value).toLocaleTimeString('sv-SE');
 };
 
 const formatTimePeriod = (dateString: string, startTime: string, endTime: string) => {
-  const startTimeString = toLocaleTimeString(`${dateString}T${startTime}`);
-  const endTimeString = toLocaleTimeString(`${dateString}T${endTime}`);
+  const startTimeString = toLocaleTimeString(`${dateString}T${startTime}`).substring(0, 5);
+  const endTimeString = toLocaleTimeString(`${dateString}T${endTime}`).substring(0, 5);
 
   return `${startTimeString}-${endTimeString}`;
 };
