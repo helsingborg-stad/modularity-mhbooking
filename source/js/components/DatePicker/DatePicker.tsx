@@ -27,47 +27,51 @@ export const DatePicker = ({ availableDates, date, required, onDateSelected }: D
     <>
       <div className="o-grid-6@md">
         <div className="form-group">
-          <label htmlFor="selectDate">
-            Datum
-            <br />
-          </label>
-          <select
-            id="selectDate"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="c-select"
-            required={required}>
-            <option value={''} key={'default'}>
-              Välj datum
-            </option>
-            {dates.map((dateValue) => (
-              <option key={dateValue}>{dateValue}</option>
-            ))}
-          </select>
-          <br />
+          <div className="c-select c-select--md c-field">
+            <label htmlFor="selectDate">Datum</label>
+            <div className="u-position--relative">
+              <select id="selectDate" value={selectedDate} onChange={handleDateChange} required={required}>
+                <option value={''} key={'default'} className="c-select__option">
+                  Välj datum
+                </option>
+                {dates.map((dateValue) => (
+                  <option key={dateValue} className="c-select__option">
+                    {dateValue}
+                  </option>
+                ))}
+              </select>
+              <i className="c-icon c-select__icon c-icon--size-md material-icons" translate="no" role="img">
+                expand_more
+              </i>
+            </div>
+          </div>
         </div>
       </div>
       <div className="o-grid-6@md">
         <div className="form-group">
-          <label htmlFor="selectTime">
-            Tid
-            <br />
-          </label>
-          <select
-            id="selectTime"
-            value={JSON.stringify(selectedTime)}
-            onChange={handleTimeChange}
-            className="c-select"
-            required={required}>
-            <option value={''} key={'default'}>
-              Välj tid
-            </option>
-            {times.map((time) => (
-              <option value={JSON.stringify(time)} key={JSON.stringify(time)}>
-                {formatTimePeriod(time.date, time.startTime, time.endTime)}
-              </option>
-            ))}
-          </select>
+          <div className="c-select c-select--md c-field">
+            <label htmlFor="selectTime">Tid</label>
+            <div className="u-position--relative">
+              <select
+                id="selectTime"
+                value={JSON.stringify(selectedTime)}
+                onChange={handleTimeChange}
+                className="c-select"
+                required={required}>
+                <option value={''} key={'default'} className="c-select__option">
+                  Välj tid
+                </option>
+                {times.map((time) => (
+                  <option value={JSON.stringify(time)} key={JSON.stringify(time)} className="c-select__option">
+                    {formatTimePeriod(time.date, time.startTime, time.endTime)}
+                  </option>
+                ))}
+              </select>
+              <i className="c-icon c-select__icon c-icon--size-md material-icons" translate="no" role="img">
+                expand_more
+              </i>
+            </div>
+          </div>
         </div>
       </div>
     </>
