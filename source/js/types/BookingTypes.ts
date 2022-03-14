@@ -59,11 +59,11 @@ export type BookingRequest = {
   endTime: string;
   date: string;
   remoteMeeting: boolean;
+  formData: Record<string, { value: string | boolean; name?: string }>;
   optionalAttendees?: string[];
   referenceCode?: string;
   subject?: string;
   location?: string;
-  body?: string;
 };
 
 export type FormData = {
