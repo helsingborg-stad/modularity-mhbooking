@@ -2,6 +2,7 @@ import moment from 'moment';
 import { AdministratorDetails, BookingItem, BookingRequest, TimeSlotDataType } from '../types/BookingTypes';
 import { convertGraphDataToBookingItem } from '../helpers/BookingHelper';
 import { get, patch, post, remove } from '../helpers/ApiRequest';
+import { subject } from '../helpers/AppParameters';
 
 type BookableItem = {
   name: string;
@@ -52,7 +53,6 @@ const updateBooking = async (
   endTime: string,
   optionalAttendees?: string[],
   referenceCode?: string,
-  subject?: string,
   location?: string,
   message?: string,
 ): Promise<Record<string, unknown>> => {
@@ -64,7 +64,7 @@ const updateBooking = async (
     referenceCode,
     location,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
-    subject: subject || 'Mitt Helsingborg bokning',
+    subject: subject,
   };
 
   const response = await patch(`/booking/${encodeURIComponent(bookingId)}`, body);

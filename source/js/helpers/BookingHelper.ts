@@ -10,6 +10,8 @@ import {
   FormData,
 } from '../types/BookingTypes';
 
+import { subject } from './AppParameters';
+
 const mockAdministrator: Administrator = {
   title: 'Lex Luthor',
   department: 'Socialförvaltningen',
@@ -123,7 +125,7 @@ const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingReq
     date: timeSlot.date,
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
     startTime: `${timeSlot.date}T${timeSlot.startTime}`,
-    subject: 'Volontärsamtal',
+    subject: subject,
     formData: formData,
     remoteMeeting: formData.remoteMeeting.value,
   };

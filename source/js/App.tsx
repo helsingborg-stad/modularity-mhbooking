@@ -20,6 +20,7 @@ import {
 import { TimeSlot, FormData } from './types/BookingTypes';
 
 import { consolidateTimeSlots, buildBookingRequest } from './helpers/BookingHelper';
+import { sharedMailbox } from './helpers/AppParameters';
 
 enum StatusType {
   loading,
@@ -61,7 +62,6 @@ function App() {
   const [administratorName, setAdministratorName] = useState<string>('');
   const [status, setStatus] = useState<StatusType>(StatusType.loading);
   const [errors, setErrors] = useState<string[]>([]);
-  const sharedMailbox = 'datatorget_testgrupp@helsingborgdemo.onmicrosoft.com';
 
   const onDateSelected = (date: { date: string; timeSlot: TimeSlot }) => {
     setSelectedDate(date);

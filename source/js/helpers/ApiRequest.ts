@@ -1,4 +1,5 @@
 import axios, { AxiosError, Method } from 'axios';
+import { baseUrl } from './AppParameters';
 
 const encodeQueryData = (queryParams: Record<string, string | number | boolean>): string => {
   const data: string[] = [];
@@ -11,7 +12,6 @@ const encodeQueryData = (queryParams: Record<string, string | number | boolean>)
 };
 
 export const buildServiceUrl = async (endpoint = '', params = {}) => {
-  const baseUrl = document.getElementById('mh-mount-booking')?.attributes.getNamedItem('data-endpoint')?.nodeValue;
   const queryString = encodeQueryData(params);
   const sanitizedEndpoint = endpoint.replace(/^\/|\/$/g, '');
   const completeUrl = `${baseUrl}/${sanitizedEndpoint}?${queryString}`;
