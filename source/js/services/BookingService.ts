@@ -13,7 +13,7 @@ import { get, patch, post, remove } from '../helpers/ApiRequest';
 const getBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await get(`/booking/${encodeURIComponent(bookingId)}`);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `getBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `getBooking: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data?.attributes;
@@ -24,7 +24,7 @@ const getBooking = async (bookingId: string): Promise<Record<string, unknown>> =
 const createBooking = async (body: BookingRequest): Promise<Record<string, unknown>> => {
   const response = await post('/booking', body);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `createBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `createBooking: Recieved error ${response?.status}`);
   }
 
   const booked = response?.data?.data;
@@ -35,7 +35,7 @@ const createBooking = async (body: BookingRequest): Promise<Record<string, unkno
 const cancelBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(bookingId)}`);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `cancelBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `cancelBooking: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data;
@@ -67,7 +67,7 @@ const updateBooking = async (
 
   const response = await patch(`/booking/${encodeURIComponent(bookingId)}`, body);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `updateBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `updateBooking: Recieved error ${response?.status}`);
   }
 
   const booked = response?.data?.data;
@@ -82,7 +82,7 @@ const searchBookings = async (referenceCode: string, startTime: string, endTime:
     endTime,
   });
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `searchBookings: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `searchBookings: Recieved error ${response?.status}`);
   }
 
   const bookings = response?.data?.data?.attributes;
@@ -96,7 +96,7 @@ const searchBookings = async (referenceCode: string, startTime: string, endTime:
 const getHistoricalAttendees = async (referenceCode: string, startTime: string, endTime: string): Promise<string[]> => {
   const response = await get(`/booking/getHistoricalAttendees/${referenceCode}`, undefined, { startTime, endTime });
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `getHistoricalAttendees: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `getHistoricalAttendees: Recieved error ${response?.status}`);
   }
 
   const timeSlots = response?.data?.data?.attributes;
@@ -112,7 +112,7 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
   });
 
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `getTimeSlots: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `getTimeSlots: Recieved error ${response?.status}`);
   }
 
   const timeSlots = response?.data?.data;
@@ -123,7 +123,7 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
 const getAdministratorDetails = async (email: string): Promise<AdministratorDetails> => {
   const response = await get(`/booking/getAdministratorDetails/${email}`);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.message || `getAdministratorDetails: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || `getAdministratorDetails: Recieved error ${response?.status}`);
   }
 
   const success = response?.data?.data?.attributes;
