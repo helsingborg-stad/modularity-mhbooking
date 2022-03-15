@@ -1,10 +1,8 @@
 import { render, waitFor } from '@testing-library/react';
 import App from './App';
-import { getTimeSlots } from './services/BookingService';
-import { getAdministratorsBySharedMailbox } from './services/BookablesService';
+import { getTimeSlots, getAdministratorsBySharedMailbox } from './api';
 
-jest.mock('./services/BookingService');
-jest.mock('./services/BookablesService');
+jest.mock('./api');
 
 const mockedGetTimeSlots = jest.mocked(getTimeSlots);
 const mockedAdministratorsBySharedMailbox = jest.mocked(getAdministratorsBySharedMailbox);

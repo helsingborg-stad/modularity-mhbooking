@@ -1,14 +1,14 @@
 import moment from 'moment';
-import {
-  AdministratorDetails,
-  BookingItem,
-  BookingRequest,
-  TimeSlot,
-  TimeSlotDataType,
-  FormData,
-} from '../types/BookingTypes';
+import { AdministratorDetails, BookingItem, BookingRequest, TimeSlotDataType } from '../types/BookingTypes';
 import { convertGraphDataToBookingItem } from '../helpers/BookingHelper';
 import { get, patch, post, remove } from '../helpers/ApiRequest';
+
+type BookableItem = {
+  name: string;
+  sharedMailbox: string;
+  address: string;
+  formId: string;
+};
 
 const getBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await get(`/booking/${encodeURIComponent(bookingId)}`);
@@ -131,17 +131,26 @@ const getAdministratorDetails = async (email: string): Promise<AdministratorDeta
   throw new Error('getAdministratorDetails: Response does not contain data.data.attributes');
 };
 
-const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
-  return {
-    organizationRequiredAttendees: [...timeSlot.emails],
-    externalRequiredAttendees: [formData.email.value],
-    date: timeSlot.date,
-    endTime: `${timeSlot.date}T${timeSlot.endTime}`,
-    startTime: `${timeSlot.date}T${timeSlot.startTime}`,
-    subject: 'Volontärsamtal',
-    formData: formData,
-    remoteMeeting: formData.remoteMeeting.value,
-  };
+const getBookables = async (): Promise<BookableItem[]> => {
+  const response = await get('/bookables');
+  if (response?.status !== 200) {
+    throw new Error(response?.data.data.detail || `getBookables: Recieved error ${response?.status}`);
+  }
+  const bookables = response?.data?.data as BookableItem[];
+  if (bookables) return bookables;
+  throw new Error('getBookables: Response does not contain data.data.attributes');
+};
+
+const getAdministratorsBySharedMailbox = async (sharedMailbox: string): Promise<string[]> => {
+  const response = await get(`/bookables/getAdministratorsByEmail/${sharedMailbox}`);
+  if (response?.status !== 200) {
+    throw new Error(
+      response?.data.data.detail || `getAdministratorsBySharedMailbox: Recieved error ${response?.status}`,
+    );
+  }
+  const admins = response?.data?.data?.attributes;
+  if (admins) return admins;
+  throw new Error('getAdministratorsBySharedMailbox: Response does not contain data.data.attributes');
 };
 
 export {
@@ -153,5 +162,6 @@ export {
   getHistoricalAttendees,
   getTimeSlots,
   getAdministratorDetails,
-  buildBookingRequest,
+  getBookables,
+  getAdministratorsBySharedMailbox,
 };

@@ -1,8 +1,7 @@
 import { useEffect, useState, FormEvent } from 'react';
 import moment from 'moment';
 
-import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlots } from './services/BookingService';
-import { getAdministratorsBySharedMailbox } from './services/BookablesService';
+import { createBooking, getAdministratorDetails, getTimeSlots, getAdministratorsBySharedMailbox } from './api';
 
 import {
   BoxContent,
@@ -20,7 +19,7 @@ import {
 
 import { TimeSlot, FormData } from './types/BookingTypes';
 
-import { consolidateTimeSlots } from './helpers/BookingHelper';
+import { consolidateTimeSlots, buildBookingRequest } from './helpers/BookingHelper';
 
 enum StatusType {
   loading,

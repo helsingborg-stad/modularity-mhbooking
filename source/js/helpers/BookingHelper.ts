@@ -1,5 +1,14 @@
 import moment from 'moment';
-import { Administrator, BookingItem, GraphData, TimeSlot, TimeSlotDataType, TimeSpan } from '../types/BookingTypes';
+import {
+  Administrator,
+  BookingItem,
+  BookingRequest,
+  GraphData,
+  TimeSlot,
+  TimeSlotDataType,
+  TimeSpan,
+  FormData,
+} from '../types/BookingTypes';
 
 const mockAdministrator: Administrator = {
   title: 'Lex Luthor',
@@ -107,10 +116,24 @@ const formatTimePeriod = (dateString: string, startTime: string, endTime: string
   return `${startTimeString}-${endTimeString}`;
 };
 
+const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
+  return {
+    organizationRequiredAttendees: [...timeSlot.emails],
+    externalRequiredAttendees: [formData.email.value],
+    date: timeSlot.date,
+    endTime: `${timeSlot.date}T${timeSlot.endTime}`,
+    startTime: `${timeSlot.date}T${timeSlot.startTime}`,
+    subject: 'Volontärsamtal',
+    formData: formData,
+    remoteMeeting: formData.remoteMeeting.value,
+  };
+};
+
 export {
   formatTimePeriod,
   consolidateTimeSlots,
   convertGraphDataToBookingItem,
   getReferenceCodeForUser,
+  buildBookingRequest,
   mockAdministrator,
 };
