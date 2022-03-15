@@ -106,6 +106,11 @@ function App() {
         const emailsResponse = await getAdministratorsBySharedMailbox(sharedMailbox);
         const timeSlotData = await getTimeSlots(emailsResponse, moment().format(), moment().add(6, 'months').format());
         const dates = consolidateTimeSlots(timeSlotData);
+
+        if (Object.keys(dates).length === 0) {
+          throw new Error('Det finns inga lediga tider att boka.');
+        }
+
         setAvailableDates(dates);
         setStatus(StatusType.ready);
       } catch (error: unknown) {
