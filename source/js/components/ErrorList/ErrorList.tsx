@@ -7,8 +7,8 @@ export const ErrorList = ({ errors }: ErrorListProps) => (
   <div>
     {errors.map((error) => {
       return (
-        <div className="u-margin__top--1">
-          <Notice key={error} iconName="error" type="danger">
+        <div key={error} className="u-margin__top--1">
+          <Notice iconName="error" type="info">
             {error}
           </Notice>
         </div>
