@@ -10,37 +10,39 @@ type BookableItem = {
   formId: string;
 };
 
+const defaultErrorMessage = 'Något gick fel.';
+
 const getBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await get(`/booking/${encodeURIComponent(bookingId)}`);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `getBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const success = response?.data?.data?.attributes;
   if (success) return success;
-  throw new Error('getBooking: Response does not contain data.data.attributes');
+  throw new Error(defaultErrorMessage);
 };
 
 const createBooking = async (body: BookingRequest): Promise<Record<string, unknown>> => {
   const response = await post('/booking', body);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `createBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const booked = response?.data?.data;
   if (booked) return booked;
-  throw new Error('createBooking: Response does not contain data.data');
+  throw new Error(defaultErrorMessage);
 };
 
 const cancelBooking = async (bookingId: string): Promise<Record<string, unknown>> => {
   const response = await remove(`/booking/${encodeURIComponent(bookingId)}`);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `cancelBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const success = response?.data?.data;
   if (success) return success;
-  throw new Error('cancelBooking: Response does not contain data.data');
+  throw new Error(defaultErrorMessage);
 };
 
 const updateBooking = async (
@@ -67,7 +69,7 @@ const updateBooking = async (
 
   const response = await patch(`/booking/${encodeURIComponent(bookingId)}`, body);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `updateBooking: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const booked = response?.data?.data;
@@ -82,7 +84,7 @@ const searchBookings = async (referenceCode: string, startTime: string, endTime:
     endTime,
   });
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `searchBookings: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const bookings = response?.data?.data?.attributes;
@@ -96,12 +98,12 @@ const searchBookings = async (referenceCode: string, startTime: string, endTime:
 const getHistoricalAttendees = async (referenceCode: string, startTime: string, endTime: string): Promise<string[]> => {
   const response = await get(`/booking/getHistoricalAttendees/${referenceCode}`, undefined, { startTime, endTime });
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `getHistoricalAttendees: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const timeSlots = response?.data?.data?.attributes;
   if (timeSlots) return timeSlots;
-  throw new Error('getHistoricalAttendees: Response does not contain data.data.attributes');
+  throw new Error(defaultErrorMessage);
 };
 
 const getTimeSlots = async (attendees: string[], startTime: string, endTime: string): Promise<TimeSlotDataType> => {
@@ -112,45 +114,43 @@ const getTimeSlots = async (attendees: string[], startTime: string, endTime: str
   });
 
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `getTimeSlots: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const timeSlots = response?.data?.data;
   if (timeSlots) return timeSlots;
-  throw new Error('getTimeSlots: Response does not contain data.data');
+  throw new Error(defaultErrorMessage);
 };
 
 const getAdministratorDetails = async (email: string): Promise<AdministratorDetails> => {
   const response = await get(`/booking/getAdministratorDetails/${email}`);
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `getAdministratorDetails: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
 
   const success = response?.data?.data?.attributes;
   if (success) return success;
-  throw new Error('getAdministratorDetails: Response does not contain data.data.attributes');
+  throw new Error(defaultErrorMessage);
 };
 
 const getBookables = async (): Promise<BookableItem[]> => {
   const response = await get('/bookables');
   if (response?.status !== 200) {
-    throw new Error(response?.data.data.detail || `getBookables: Recieved error ${response?.status}`);
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
   const bookables = response?.data?.data as BookableItem[];
   if (bookables) return bookables;
-  throw new Error('getBookables: Response does not contain data.data.attributes');
+  throw new Error(defaultErrorMessage);
 };
 
 const getAdministratorsBySharedMailbox = async (sharedMailbox: string): Promise<string[]> => {
   const response = await get(`/bookables/getAdministratorsByEmail/${sharedMailbox}`);
   if (response?.status !== 200) {
-    throw new Error(
-      response?.data.data.detail || `getAdministratorsBySharedMailbox: Recieved error ${response?.status}`,
-    );
+    throw new Error(response?.data.data.detail || defaultErrorMessage);
   }
   const admins = response?.data?.data?.attributes;
   if (admins) return admins;
-  throw new Error('getAdministratorsBySharedMailbox: Response does not contain data.data.attributes');
+  throw new Error(defaultErrorMessage);
 };
 
 export {
