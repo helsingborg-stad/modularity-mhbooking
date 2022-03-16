@@ -24,7 +24,7 @@ if (function_exists('acf_add_local_field_group')) {
             'placeholder' => '',
         ),
         1 => array(
-            'key' => 'REPLACE1',
+            'key' => 'field_shared_mailbox',
             'label' => __('Shared mailbox', 'modularity-mhbooking'),
             'name' => 'mod_mhbooking_shared_mailbox',
             'type' => 'url',
@@ -40,7 +40,7 @@ if (function_exists('acf_add_local_field_group')) {
             'placeholder' => '',
         ),
         2=> array(
-            'key' => 'REPLACE2',
+            'key' => 'field_meeting_subject',
             'label' => __('Meeting subject', 'modularity-mhbooking'),
             'name' => 'mod_mhbooking_meeting_subject',
             'type' => 'url',

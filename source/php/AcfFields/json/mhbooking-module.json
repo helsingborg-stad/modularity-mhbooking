@@ -20,7 +20,7 @@
                 "placeholder": ""
             },
             {
-                "key": "REPLACE1",
+                "key": "field_shared_mailbox",
                 "label": "Shared mailbox",
                 "name": "mod_mhbooking_shared_mailbox",
                 "type": "url",
@@ -36,7 +36,7 @@
                 "placeholder": ""
             },
             {
-                "key": "REPLACE2",
+                "key": "field_meeting_subject",
                 "label": "Meeting subject",
                 "name": "mod_mhbooking_meeting_subject",
                 "type": "url",
