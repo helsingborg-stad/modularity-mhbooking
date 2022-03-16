@@ -1,8 +1,7 @@
 import { useEffect, useState, FormEvent } from 'react';
 import moment from 'moment';
 
-import { buildBookingRequest, createBooking, getAdministratorDetails, getTimeSlots } from './services/BookingService';
-import { getAdministratorsBySharedMailbox } from './services/BookablesService';
+import { createBooking, getAdministratorDetails, getTimeSlots, getAdministratorsBySharedMailbox } from './api';
 
 import {
   BoxContent,
@@ -20,7 +19,7 @@ import {
 
 import { TimeSlot, FormData } from './types/BookingTypes';
 
-import { consolidateTimeSlots } from './helpers/BookingHelper';
+import { consolidateTimeSlots, buildBookingRequest } from './helpers/BookingHelper';
 
 enum StatusType {
   loading,
@@ -106,6 +105,11 @@ function App() {
         const emailsResponse = await getAdministratorsBySharedMailbox(sharedMailbox);
         const timeSlotData = await getTimeSlots(emailsResponse, moment().format(), moment().add(6, 'months').format());
         const dates = consolidateTimeSlots(timeSlotData);
+
+        if (Object.keys(dates).length === 0) {
+          throw new Error('Det finns inga lediga tider att boka.');
+        }
+
         setAvailableDates(dates);
         setStatus(StatusType.ready);
       } catch (error: unknown) {
