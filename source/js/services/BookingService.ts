@@ -131,19 +131,6 @@ const getAdministratorDetails = async (email: string): Promise<AdministratorDeta
   throw new Error('getAdministratorDetails: Response does not contain data.data.attributes');
 };
 
-const parseFormValue = (value: string | boolean): string => {
-  if (typeof value === 'string') {
-    return value;
-  }
-  return value ? 'Ja' : 'Nej';
-};
-
-const formToHTML = (form: FormData) => {
-  return Object.values(form)
-    .filter((item) => item.name)
-    .reduce((prev: string, item: any) => prev + `<p>${item.name}: ${parseFormValue(item.value)}</p>`, '');
-};
-
 const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
   return {
     organizationRequiredAttendees: [...timeSlot.emails],
@@ -152,9 +139,7 @@ const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingReq
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
     startTime: `${timeSlot.date}T${timeSlot.startTime}`,
     subject: 'Volontärsamtal',
-    body: `<body><p>Du har fått en bokning. Klicka på Acceptera för att bekräfta bokningen.</p>${formToHTML(
-      formData,
-    )}</body>`,
+    formData: formData,
     remoteMeeting: formData.remoteMeeting.value,
   };
 };
