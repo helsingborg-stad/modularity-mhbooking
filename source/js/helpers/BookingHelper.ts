@@ -125,7 +125,7 @@ const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingReq
     date: timeSlot.date,
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
     startTime: `${timeSlot.date}T${timeSlot.startTime}`,
-    subject: subject,
+    subject,
     formData: formData,
     remoteMeeting: formData.remoteMeeting.value,
   };

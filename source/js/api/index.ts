@@ -64,7 +64,7 @@ const updateBooking = async (
     referenceCode,
     location,
     body: `Du har fått en bokning ifrån Mitt Helsingborg. Klicka på Acceptera för att bekräfta bokningen.\n\n${message}`,
-    subject: subject,
+    subject,
   };
 
   const response = await patch(`/booking/${encodeURIComponent(bookingId)}`, body);
