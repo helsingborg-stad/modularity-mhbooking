@@ -1,47 +1,80 @@
-[{
-    "key": "group_620f6978b127c",
-    "title": "Settings for Booking Service",
-    "fields": [
-        {
-            "key": "field_620f6984f8b48",
-            "label": "Endpoint for Mitt Helsingborg Booking Service",
-            "name": "mod_mhbooking_endpoint",
-            "type": "url",
-            "instructions": "You can get the endpoint from the Mitt Helsingborg Team.",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": ""
-        }
-    ],
-    "location": [
-        [
+[
+    {
+        "key": "group_620f6978b127c",
+        "title": "Settings for Booking Service",
+        "fields": [
             {
-                "param": "post_type",
-                "operator": "==",
-                "value": "mod-mhbooking"
+                "key": "field_620f6984f8b48",
+                "label": "Endpoint for Mitt Helsingborg Booking Service",
+                "name": "mod_mhbooking_endpoint",
+                "type": "url",
+                "instructions": "You can get the endpoint from the Mitt Helsingborg Team.",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": ""
+            },
+            {
+                "key": "field_shared_mailbox",
+                "label": "Shared mailbox",
+                "name": "mod_mhbooking_shared_mailbox",
+                "type": "url",
+                "instructions": "Configure which shared mailbox to use.",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": ""
+            },
+            {
+                "key": "field_meeting_subject",
+                "label": "Meeting subject",
+                "name": "mod_mhbooking_meeting_subject",
+                "type": "url",
+                "instructions": "Configure the meeting subject that will be used in the application.",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "placeholder": ""
             }
         ],
-        [
-            {
-                "param": "block",
-                "operator": "==",
-                "value": "acf\/mhbooking"
-            }
-        ]
-    ],
-    "menu_order": 0,
-    "position": "normal",
-    "style": "default",
-    "label_placement": "top",
-    "instruction_placement": "label",
-    "hide_on_screen": "",
-    "active": true,
-    "description": ""
-}]
-
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "mod-mhbooking"
+                }
+            ],
+            [
+                {
+                    "param": "block",
+                    "operator": "==",
+                    "value": "acf\/mhbooking"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": ""
+    }
+]
