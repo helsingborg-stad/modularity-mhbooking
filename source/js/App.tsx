@@ -75,7 +75,7 @@ function App() {
       const requestData = buildBookingRequest(selectedDate.timeSlot, formData);
       try {
         await createBooking(requestData);
-        const administratorDetails = await getAdministratorDetails(selectedDate.timeSlot.emails[0]);
+        const administratorDetails = await getAdministratorDetails(requestData.organizationRequiredAttendees[0]);
         setAdministratorName(administratorDetails.DisplayName);
         setStatus(StatusType.sent);
       } catch (error: unknown) {
