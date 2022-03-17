@@ -116,9 +116,15 @@ const formatTimePeriod = (dateString: string, startTime: string, endTime: string
   return `${startTimeString}-${endTimeString}`;
 };
 
+const randomNumberFromInterval = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
 const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
+  const randomOrganizationRequiredAttendee = timeSlot.emails[randomNumberFromInterval(0, timeSlot.emails.length - 1)];
+
   return {
-    organizationRequiredAttendees: [...timeSlot.emails],
+    organizationRequiredAttendees: [randomOrganizationRequiredAttendee],
     externalRequiredAttendees: [formData.email.value],
     date: timeSlot.date,
     endTime: `${timeSlot.date}T${timeSlot.endTime}`,
