@@ -1,9 +1,7 @@
 <?php 
 
-
-if (function_exists('acf_add_local_field_group')) {
-
-    acf_add_local_field_group(array(
+if (function_exists('acf_add_local_field_group')) {
+    acf_add_local_field_group(array(
     'key' => 'group_620f6978b127c',
     'title' => __('Settings for Booking Service', 'modularity-mhbooking'),
     'fields' => array(
@@ -27,7 +25,7 @@ if (function_exists('acf_add_local_field_group')) {
             'key' => 'field_shared_mailbox',
             'label' => __('Shared mailbox', 'modularity-mhbooking'),
             'name' => 'mod_mhbooking_shared_mailbox',
-            'type' => 'url',
+            'type' => 'email',
             'instructions' => __('Configure which shared mailbox to use.', 'modularity-mhbooking'),
             'required' => 1,
             'conditional_logic' => 0,
@@ -38,12 +36,14 @@ if (function_exists('acf_add_local_field_group')) {
             ),
             'default_value' => '',
             'placeholder' => '',
+            'prepend' => '',
+            'append' => '',
         ),
-        2=> array(
+        2 => array(
             'key' => 'field_meeting_subject',
             'label' => __('Meeting subject', 'modularity-mhbooking'),
             'name' => 'mod_mhbooking_meeting_subject',
-            'type' => 'url',
+            'type' => 'text',
             'instructions' => __('Configure the meeting subject that will be used in the application.', 'modularity-mhbooking'),
             'required' => 1,
             'conditional_logic' => 0,
@@ -54,6 +54,9 @@ if (function_exists('acf_add_local_field_group')) {
             ),
             'default_value' => '',
             'placeholder' => '',
+            'prepend' => '',
+            'append' => '',
+            'maxlength' => '',
         ),
     ),
     'location' => array(
@@ -81,5 +84,4 @@ if (function_exists('acf_add_local_field_group')) {
     'active' => true,
     'description' => '',
 ));
-
-}
+}
