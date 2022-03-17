@@ -1,4 +1,4 @@
-@if(!empty($modMhbookingEndpoint) && !empty($modMhbookingSharedMailbox) && !empty($modMhbookingSubject))
+@if(!empty($modMhbookingEndpoint) && !empty($modMhbookingSharedMailbox) && !empty($modMhbookingMeetingSubject))
     @card(['context' => 'module.mhbooking'])
         <div class="c-card__body">
             @if (!$hideTitle)
@@ -9,7 +9,7 @@
                     {{ $postTitle }}
                 @endtypography
             @endif
-            <div id="mh-mount-booking" class="mh-mount-booking" data-endpoint="{{ $modMhbookingEndpoint }}" data-sharedmailbox="{{ $modMhbookingSharedMailbox }}" data-subject="{{ $modMhbookingSubject }}">
+            <div id="mh-mount-booking" class="mh-mount-booking" data-endpoint="{{ $modMhbookingEndpoint }}" data-sharedmailbox="{{ $modMhbookingSharedMailbox }}" data-subject="{{ $modMhbookingMeetingSubject }}">
                 <!-- Mount of MH Booking -->
             </div>
         </div>
