@@ -34,9 +34,15 @@ it('calls onChange prop when value changes', () => {
   ];
 
   const { container } = render(
-    <Select id="checkbox" label="MyLabel" onChange={handleChange} value="" options={options} />,
+    <Select id="checkbox" label="MyLabel" value="option1" onChange={handleChange} options={options} />,
   );
   fireEvent.change(container.querySelector('select') as HTMLElement, { target: { value: 'option1' } });
 
-  expect(handleChange).toHaveBeenCalledTimes(1);
+  expect(handleChange).toHaveBeenCalledWith(
+    expect.objectContaining({
+      target: expect.objectContaining({
+        value: 'option1',
+      }),
+    }),
+  );
 });
