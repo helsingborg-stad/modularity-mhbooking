@@ -1,21 +1,13 @@
-import { HtmlHTMLAttributes } from 'react';
-
 interface SelectInterface {
   onChange: React.ChangeEventHandler<HTMLSelectElement>;
+  id: string;
   value: string;
   label: string;
   options: { value: string; label: string }[];
   required?: boolean;
 }
 
-export const Select = ({
-  onChange,
-  id,
-  label,
-  value,
-  options,
-  required = false,
-}: SelectInterface & HtmlHTMLAttributes<HTMLSelectElement>) => (
+export const Select = ({ onChange, id, label, value, options, required = false }: SelectInterface) => (
   <div className="c-select c-select--md c-field">
     <label htmlFor={id}>{label}</label>
     <div className="u-position--relative">

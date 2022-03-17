@@ -12,19 +12,12 @@ interface DatePickerInterface {
 export const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
   const { date: selectedDate, timeSlot: selectedTime } = date ?? { date: '' };
 
-  const dates = Object.keys(availableDates).map((value) => {
-    return {
-      value,
-      label: value,
-    };
-  });
+  const dates = Object.keys(availableDates).map((value) => ({ value, label: value }));
 
-  const times = (selectedDate ? availableDates[selectedDate] : []).map((timeslot) => {
-    return {
-      value: JSON.stringify(timeslot),
-      label: formatTimePeriod(timeslot.date, timeslot.startTime, timeslot.endTime),
-    };
-  });
+  const times = (selectedDate ? availableDates[selectedDate] : []).map((timeslot) => ({
+    value: JSON.stringify(timeslot),
+    label: formatTimePeriod(timeslot.date, timeslot.startTime, timeslot.endTime),
+  }));
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onDateSelected({ date: event.target.value, timeSlot: { date: '', emails: [], endTime: '', startTime: '' } });
