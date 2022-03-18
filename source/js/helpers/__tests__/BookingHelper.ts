@@ -6,6 +6,8 @@ import {
   roundUpDateToNearestQuarter,
 } from '../BookingHelper';
 
+jest.mock('../AppParameters', () => ({ subject: 'Volontärsamtal' }));
+
 const formData: FormData = {
   firstname: {
     value: 'firstname',
