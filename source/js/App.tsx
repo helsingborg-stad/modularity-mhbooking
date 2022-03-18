@@ -19,7 +19,7 @@ import {
 
 import { TimeSlot, FormData } from './types/BookingTypes';
 
-import { consolidateTimeSlots, buildBookingRequest } from './helpers/BookingHelper';
+import { consolidateTimeSlots, buildBookingRequest, roundUpDateToNearestQuarter } from './helpers/BookingHelper';
 import { sharedMailbox } from './helpers/AppParameters';
 
 enum StatusType {
@@ -103,7 +103,9 @@ function App() {
     const fetchData = async () => {
       try {
         const emailsResponse = await getAdministratorsBySharedMailbox(sharedMailbox);
-        const timeSlotData = await getTimeSlots(emailsResponse, moment().format(), moment().add(6, 'months').format());
+        const fromDate = moment(roundUpDateToNearestQuarter(new Date())).format();
+        const toDate = moment().add(6, 'months').format();
+        const timeSlotData = await getTimeSlots(emailsResponse, fromDate, toDate);
         const dates = consolidateTimeSlots(timeSlotData);
 
         if (Object.keys(dates).length === 0) {

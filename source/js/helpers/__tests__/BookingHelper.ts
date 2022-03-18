@@ -1,5 +1,10 @@
 import { TimeSlot, FormData } from '../../types/BookingTypes';
-import { formatTimePeriod, consolidateTimeSlots, buildBookingRequest } from '../BookingHelper';
+import {
+  formatTimePeriod,
+  consolidateTimeSlots,
+  buildBookingRequest,
+  roundUpDateToNearestQuarter,
+} from '../BookingHelper';
 
 const formData: FormData = {
   firstname: {
@@ -132,5 +137,18 @@ describe('buildBookingRequest', () => {
       startTime: '2022-03-17T07:00:0000:00',
       subject: 'Volontärsamtal',
     });
+  });
+});
+
+describe('roundUpDateToNearestQuarter', () => {
+  it.each([
+    ['2022-03-18T15:26:00.000Z', '2022-03-18T15:30:00.000Z'],
+    ['2022-03-18T15:31:00.000Z', '2022-03-18T15:45:00.000Z'],
+    ['2022-03-18T15:46:00.000Z', '2022-03-18T16:00:00.000Z'],
+    ['2022-03-18T16:02:00.000Z', '2022-03-18T16:15:00.000Z'],
+  ])('rounds up %s to %s', (value, expected) => {
+    const dateString = roundUpDateToNearestQuarter(new Date(value)).toISOString();
+
+    expect(dateString).toBe(expected);
   });
 });
