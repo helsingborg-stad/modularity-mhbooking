@@ -1,5 +1,6 @@
 import { formatTimePeriod } from '../../helpers/BookingHelper';
 import { TimeSlot } from '../../types/BookingTypes';
+import { Select } from '../';
 
 interface DatePickerInterface {
   availableDates: Record<string, TimeSlot[]>;
@@ -9,9 +10,14 @@ interface DatePickerInterface {
 }
 
 export const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
-  const { date: selectedDate, timeSlot: selectedTime } = date ?? {};
-  const dates = Object.keys(availableDates);
-  const times = selectedDate ? availableDates[selectedDate] : [];
+  const { date: selectedDate, timeSlot: selectedTime } = date ?? { date: '' };
+
+  const dates = Object.keys(availableDates).map((value) => ({ value, label: value }));
+
+  const times = (selectedDate ? availableDates[selectedDate] : []).map((timeslot) => ({
+    value: JSON.stringify(timeslot),
+    label: formatTimePeriod(timeslot.date, timeslot.startTime, timeslot.endTime),
+  }));
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onDateSelected({ date: event.target.value, timeSlot: { date: '', emails: [], endTime: '', startTime: '' } });
@@ -27,47 +33,26 @@ export const DatePicker = ({ availableDates, date, required, onDateSelected }: D
     <>
       <div className="o-grid-6@md">
         <div className="form-group">
-          <label htmlFor="selectDate">
-            Datum
-            <br />
-          </label>
-          <select
-            id="selectDate"
+          <Select
             value={selectedDate}
+            id="selectDate"
+            label="Datum"
+            options={[{ label: 'Välj datum', value: '' }, ...dates]}
+            required={required}
             onChange={handleDateChange}
-            className="c-select"
-            required={required}>
-            <option value={''} key={'default'}>
-              Välj datum
-            </option>
-            {dates.map((dateValue) => (
-              <option key={dateValue}>{dateValue}</option>
-            ))}
-          </select>
-          <br />
+          />
         </div>
       </div>
       <div className="o-grid-6@md">
         <div className="form-group">
-          <label htmlFor="selectTime">
-            Tid
-            <br />
-          </label>
-          <select
-            id="selectTime"
+          <Select
             value={JSON.stringify(selectedTime)}
+            id="selectTime"
+            label="Tid"
+            options={[{ label: 'Välj tid', value: '' }, ...times]}
+            required={required}
             onChange={handleTimeChange}
-            className="c-select"
-            required={required}>
-            <option value={''} key={'default'}>
-              Välj tid
-            </option>
-            {times.map((time) => (
-              <option value={JSON.stringify(time)} key={JSON.stringify(time)}>
-                {formatTimePeriod(time.date, time.startTime, time.endTime)}
-              </option>
-            ))}
-          </select>
+          />
         </div>
       </div>
     </>
