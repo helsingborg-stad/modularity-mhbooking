@@ -1,5 +1,5 @@
 import { useEffect, useState, FormEvent } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import { createBooking, getAdministratorDetails, getTimeSlots, getAdministratorsBySharedMailbox } from './api';
 
@@ -103,8 +103,9 @@ function App() {
     const fetchData = async () => {
       try {
         const emailsResponse = await getAdministratorsBySharedMailbox(sharedMailbox);
-        const fromDate = moment(roundUpDateToNearestQuarter(new Date())).format();
-        const toDate = moment().add(6, 'months').format();
+        const now = roundUpDateToNearestQuarter(new Date());
+        const fromDate = dayjs(now).format();
+        const toDate = dayjs(now).add(6, 'months').format();
         const timeSlotData = await getTimeSlots(emailsResponse, fromDate, toDate);
         const dates = consolidateTimeSlots(timeSlotData);
 
