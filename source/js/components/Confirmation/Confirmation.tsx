@@ -15,7 +15,7 @@ export const Confirmation = ({
   endTime = '',
 }: ConfirmationInterface) => (
   <div>
-    <p className="c-typography__variant--h1">Tack för din bokning!</p>
+    <p className="c-typography c-typography__variant--h1">Tack för din bokning!</p>
     <p>Du har bokat tid med {administratorName} följande tid:</p>
     <p>
       {formatTimePeriod(date, startTime, endTime)} den {date}
