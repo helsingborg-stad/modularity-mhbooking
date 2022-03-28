@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   Administrator,
   BookingItem,
@@ -81,9 +81,9 @@ const convertGraphDataToBookingItem = (graphData: GraphData): BookingItem => {
   const firstAttendee = graphData.Attendees[0];
   const administrator = { ...mockAdministrator, email: firstAttendee.Email };
   const { Status: status } = firstAttendee;
-  const date = moment(graphData.StartTime).format('YYYY-MM-DD');
-  const startTime = moment(graphData.StartTime).format('HH:mm');
-  const endTime = moment(graphData.EndTime).format('HH:mm');
+  const date = dayjs(graphData.StartTime).format('YYYY-MM-DD');
+  const startTime = dayjs(graphData.StartTime).format('HH:mm');
+  const endTime = dayjs(graphData.EndTime).format('HH:mm');
   const title = graphData.Subject.substring(0, graphData.Subject.indexOf('#'));
   const referenceCode = graphData.ReferenceCode;
   const { BookingId: id, Body: body, Location: location } = graphData;
@@ -137,11 +137,19 @@ const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingReq
   };
 };
 
+const roundUpDateToNearestQuarter = (date: Date) => {
+  const minutes = 15;
+  const ms = 1000 * 60 * minutes;
+
+  return new Date(Math.ceil(date.getTime() / ms) * ms);
+};
+
 export {
   formatTimePeriod,
   consolidateTimeSlots,
   convertGraphDataToBookingItem,
   getReferenceCodeForUser,
   buildBookingRequest,
+  roundUpDateToNearestQuarter,
   mockAdministrator,
 };

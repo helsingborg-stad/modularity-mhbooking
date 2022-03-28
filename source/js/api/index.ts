@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { AdministratorDetails, BookingItem, BookingRequest, TimeSlotDataType } from '../types/BookingTypes';
 import { convertGraphDataToBookingItem } from '../helpers/BookingHelper';
 import { get, patch, post, remove } from '../helpers/ApiRequest';
@@ -58,8 +58,8 @@ const updateBooking = async (
 ): Promise<Record<string, unknown>> => {
   const body = {
     requiredAttendees,
-    startTime: moment(startTime).format(),
-    endTime: moment(endTime).format(),
+    startTime: dayjs(startTime).format(),
+    endTime: dayjs(endTime).format(),
     optionalAttendees,
     referenceCode,
     location,
