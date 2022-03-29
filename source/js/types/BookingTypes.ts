@@ -91,6 +91,10 @@ export type FormData = {
     value: boolean;
     name?: string;
   };
+  date: {
+    value: string;
+  };
+  timeSlot?: TimeSlot;
 };
 
 export type TimeSlotDataType = Record<string, Record<string, TimeSpan[]>>;

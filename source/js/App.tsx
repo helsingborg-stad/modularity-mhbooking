@@ -17,10 +17,16 @@ import {
   TextField,
 } from './components';
 
-import { TimeSlot, FormData } from './types/BookingTypes';
+import { TimeSlot } from './types/BookingTypes';
 
-import { consolidateTimeSlots, buildBookingRequest, roundUpDateToNearestQuarter } from './helpers/BookingHelper';
+import {
+  consolidateTimeSlots,
+  buildBookingRequest,
+  roundUpDateToNearestQuarter,
+  coerceError,
+} from './helpers/BookingHelper';
 import { sharedMailbox } from './helpers/AppParameters';
+import { useBookingForm } from './hooks/BookingForm';
 
 enum StatusType {
   loading,
@@ -30,73 +36,27 @@ enum StatusType {
   error,
 }
 
-const coerceError = (error: unknown): Error => {
-  return typeof error === 'string' ? new Error(error) : (error as Error);
-};
-
-const initialFormData: FormData = {
-  firstname: {
-    value: '',
-  },
-  lastname: {
-    value: '',
-  },
-  email: {
-    value: '',
-  },
-  phone: {
-    value: '',
-  },
-  comment: {
-    value: '',
-  },
-  remoteMeeting: {
-    value: false,
-  },
-};
-
 function App() {
-  const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
-  const [selectedDate, setSelectedDate] = useState<{ date: string; timeSlot: TimeSlot }>();
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [administratorName, setAdministratorName] = useState<string>('');
-  const [status, setStatus] = useState<StatusType>(StatusType.loading);
   const [errors, setErrors] = useState<string[]>([]);
-
-  const onDateSelected = (date: { date: string; timeSlot: TimeSlot }) => {
-    setSelectedDate(date);
-  };
+  const [status, setStatus] = useState<StatusType>(StatusType.loading);
+  const [administratorName, setAdministratorName] = useState<string>('');
+  const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
+  const { formData, handleDateChange, handleCheckboxChange, handleTextFieldChange } = useBookingForm();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors([]);
     setStatus(StatusType.sending);
-    if (selectedDate?.timeSlot.emails[0]) {
-      const requestData = buildBookingRequest(selectedDate.timeSlot, formData);
-      try {
-        await createBooking(requestData);
-        const administratorDetails = await getAdministratorDetails(requestData.organizationRequiredAttendees[0]);
-        setAdministratorName(administratorDetails.DisplayName);
-        setStatus(StatusType.sent);
-      } catch (error: unknown) {
-        setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
-        setStatus(StatusType.ready);
-      }
+    const requestData = buildBookingRequest(formData);
+    try {
+      await createBooking(requestData);
+      const administratorDetails = await getAdministratorDetails(requestData.organizationRequiredAttendees[0]);
+      setAdministratorName(administratorDetails.DisplayName);
+      setStatus(StatusType.sent);
+    } catch (error: unknown) {
+      setErrors((currentErrors) => [...currentErrors, coerceError(error)?.message]);
+      setStatus(StatusType.ready);
     }
-  };
-
-  const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value, name } = event.target;
-    setFormData((currentFormData) => {
-      return { ...currentFormData, [id]: { value, name } };
-    });
-  };
-
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, checked, name } = event.target;
-    setFormData((currentFormData) => {
-      return { ...currentFormData, [id]: { value: checked, name } };
-    });
   };
 
   useEffect(() => {
@@ -130,9 +90,9 @@ function App() {
       <Confirmation
         administratorName={administratorName}
         userEmail={formData.email.value}
-        date={selectedDate?.date}
-        startTime={selectedDate?.timeSlot.startTime}
-        endTime={selectedDate?.timeSlot.endTime}
+        date={formData.date.value}
+        startTime={formData.timeSlot?.startTime}
+        endTime={formData.timeSlot?.endTime}
       />
     ),
     [StatusType.ready]: (
@@ -141,7 +101,12 @@ function App() {
 
         {/* Date picker */}
         <GridRow modFormField>
-          <DatePicker availableDates={availableDates} date={selectedDate} onDateSelected={onDateSelected} required />
+          <DatePicker
+            availableDates={availableDates}
+            value={{ date: formData.date.value, timeSlot: formData.timeSlot }}
+            onDateSelected={handleDateChange}
+            required
+          />
         </GridRow>
 
         {/* Name and lastname */}

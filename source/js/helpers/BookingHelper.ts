@@ -122,18 +122,19 @@ const randomNumberFromInterval = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const buildBookingRequest = (timeSlot: TimeSlot, formData: FormData): BookingRequest => {
-  const randomOrganizationRequiredAttendee = timeSlot.emails[randomNumberFromInterval(0, timeSlot.emails.length - 1)];
+const buildBookingRequest = (formData: FormData): BookingRequest => {
+  const { date, timeSlot, ...formInput } = formData;
+  const randomOrganizationRequiredAttendee = timeSlot?.emails[randomNumberFromInterval(0, timeSlot.emails.length - 1)];
 
   return {
-    organizationRequiredAttendees: [randomOrganizationRequiredAttendee],
-    externalRequiredAttendees: [formData.email.value],
-    date: timeSlot.date,
-    endTime: `${timeSlot.date}T${timeSlot.endTime}`,
-    startTime: `${timeSlot.date}T${timeSlot.startTime}`,
     subject,
-    formData: formData,
+    date: date.value,
+    formData: { ...formInput },
     remoteMeeting: formData.remoteMeeting.value,
+    endTime: `${date.value}T${timeSlot?.endTime}`,
+    startTime: `${date.value}T${timeSlot?.startTime}`,
+    externalRequiredAttendees: [formData.email.value],
+    organizationRequiredAttendees: [randomOrganizationRequiredAttendee ?? ''],
   };
 };
 
@@ -144,7 +145,12 @@ const roundUpDateToNearestQuarter = (date: Date) => {
   return new Date(Math.ceil(date.getTime() / ms) * ms);
 };
 
+const coerceError = (error: unknown): Error => {
+  return typeof error === 'string' ? new Error(error) : (error as Error);
+};
+
 export {
+  coerceError,
   formatTimePeriod,
   consolidateTimeSlots,
   convertGraphDataToBookingItem,
