@@ -1,4 +1,4 @@
-import { TimeSlot, FormData } from '../../types/BookingTypes';
+import { FormData } from '../../types/BookingTypes';
 import {
   formatTimePeriod,
   consolidateTimeSlots,
@@ -32,6 +32,15 @@ const formData: FormData = {
   remoteMeeting: {
     value: false,
     name: 'Jag vill ansluta digitalt',
+  },
+  date: {
+    value: '2022-03-17',
+  },
+  timeSlot: {
+    date: '2022-03-17',
+    startTime: '07:00:0000:00',
+    endTime: '08:00:0000:00',
+    emails: ['email@email.com'],
   },
 };
 
@@ -95,14 +104,7 @@ describe('consolidateTimeSlots', () => {
 
 describe('buildBookingRequest', () => {
   it('maps formdata to booking request body', () => {
-    const timeSlot: TimeSlot = {
-      date: '2022-03-17',
-      startTime: '07:00:0000:00',
-      endTime: '08:00:0000:00',
-      emails: ['email@email.com'],
-    };
-
-    const bookingRequest = buildBookingRequest(timeSlot, formData);
+    const bookingRequest = buildBookingRequest(formData);
 
     expect(bookingRequest).toEqual({
       date: '2022-03-17',

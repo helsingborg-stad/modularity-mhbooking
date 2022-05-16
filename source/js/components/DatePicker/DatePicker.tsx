@@ -4,15 +4,15 @@ import { Select } from '../';
 
 interface DatePickerInterface {
   availableDates: Record<string, TimeSlot[]>;
-  date: { date: string; timeSlot: TimeSlot } | undefined;
+  value: { date: string; timeSlot?: TimeSlot };
   required: boolean;
   onDateSelected: (date: { date: string; timeSlot: TimeSlot }) => void;
 }
 
-export const DatePicker = ({ availableDates, date, required, onDateSelected }: DatePickerInterface) => {
-  const { date: selectedDate, timeSlot: selectedTime } = date ?? { date: '' };
+export const DatePicker = ({ availableDates, value, required, onDateSelected }: DatePickerInterface) => {
+  const { date: selectedDate, timeSlot: selectedTimeSlot } = value;
 
-  const dates = Object.keys(availableDates).map((value) => ({ value, label: value }));
+  const dates = Object.keys(availableDates).map((key) => ({ value: key, label: key }));
 
   const times = (selectedDate ? availableDates[selectedDate] : []).map((timeslot) => ({
     value: JSON.stringify(timeslot),
@@ -46,7 +46,7 @@ export const DatePicker = ({ availableDates, date, required, onDateSelected }: D
       <div className="o-grid-6@md">
         <div className="form-group">
           <Select
-            value={JSON.stringify(selectedTime)}
+            value={JSON.stringify(selectedTimeSlot)}
             id="selectTime"
             label="Tid"
             options={[{ label: 'Välj tid', value: '' }, ...times]}
