@@ -1,13 +1,12 @@
 import { useEffect, useState, FormEvent } from 'react';
 import dayjs from 'dayjs';
 
-import { createBooking, getAdministratorDetails, getTimeSlots, getAdministratorsBySharedMailbox } from './api';
+import { createBooking, getAdministratorDetails, getTimeSlots, getAdministratorsBySharedMailbox, getUser } from './api';
 
 import {
   BoxContent,
   Button,
   Confirmation,
-  Checkbox,
   DatePicker,
   ErrorList,
   Form,
@@ -41,7 +40,7 @@ function App() {
   const [status, setStatus] = useState<StatusType>(StatusType.loading);
   const [administratorName, setAdministratorName] = useState<string>('');
   const [availableDates, setAvailableDates] = useState<Record<string, TimeSlot[]>>({});
-  const { formData, handleDateChange, handleCheckboxChange, handleTextFieldChange } = useBookingForm();
+  const { formData, handleDateChange, handleTextFieldChange } = useBookingForm();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,6 +67,12 @@ function App() {
         const toDate = dayjs(now).add(6, 'months').format();
         const timeSlotData = await getTimeSlots(emailsResponse, fromDate, toDate);
         const dates = consolidateTimeSlots(timeSlotData);
+        const { email, mobilePhone, firstName, lastName } = await getUser();
+
+        formData.firstname.value = firstName;
+        formData.lastname.value = lastName;
+        formData.email.value = email;
+        formData.phone.value = mobilePhone;
 
         if (Object.keys(dates).length === 0) {
           throw new Error('Det finns inga lediga tider att boka.');
@@ -81,7 +86,7 @@ function App() {
       }
     };
     void fetchData();
-  }, []);
+  }, [formData.email, formData.firstname, formData.lastname, formData.phone]);
 
   const content: Record<StatusType, JSX.Element> = {
     [StatusType.loading]: <Loader text="Laddar formulär..." />,
@@ -109,73 +114,15 @@ function App() {
           />
         </GridRow>
 
-        {/* Name and lastname */}
-        <GridRow modFormField>
-          <GridElement width={6}>
-            <TextField
-              label="Förnamn"
-              id="firstname"
-              onChange={handleTextFieldChange}
-              value={formData.firstname?.value}
-              type="text"
-              required
-            />
-          </GridElement>
-          <GridElement width={6}>
-            <TextField
-              label="Efternamn"
-              id="lastname"
-              onChange={handleTextFieldChange}
-              value={formData.lastname?.value}
-              type="text"
-              required
-            />
-          </GridElement>
-        </GridRow>
-
-        {/* Email and phone */}
-        <GridRow modFormField>
-          <GridElement width={6}>
-            <TextField
-              label="E-post"
-              id="email"
-              onChange={handleTextFieldChange}
-              value={formData.email?.value}
-              type="email"
-              required
-            />
-          </GridElement>
-          <GridElement width={6}>
-            <TextField
-              label="Telefon"
-              id="phone"
-              onChange={handleTextFieldChange}
-              value={formData.phone?.value}
-              type="tel"
-            />
-          </GridElement>
-        </GridRow>
-
         {/* Comment */}
         <GridRow modFormField>
           <GridElement width={12}>
             <TextField
-              label="Övrig information"
+              label="Kommentar"
               id="comment"
               onChange={handleTextFieldChange}
               value={formData.comment?.value}
               type="text"
-            />
-          </GridElement>
-        </GridRow>
-
-        <GridRow modFormField>
-          <GridElement width={12}>
-            <Checkbox
-              label="Jag vill ansluta till mötet digitalt"
-              id="remoteMeeting"
-              onChange={handleCheckboxChange}
-              checked={formData.remoteMeeting.value}
             />
           </GridElement>
         </GridRow>

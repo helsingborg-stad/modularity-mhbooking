@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import Cookies from 'js-cookie';
 import { AdministratorDetails, BookingItem, BookingRequest, TimeSlotDataType } from '../types/BookingTypes';
 import { convertGraphDataToBookingItem } from '../helpers/BookingHelper';
 import { get, patch, post, remove } from '../helpers/ApiRequest';
@@ -151,6 +152,29 @@ const getAdministratorsBySharedMailbox = async (sharedMailbox: string): Promise<
   const admins = response?.data?.data?.attributes;
   if (admins) return admins;
   throw new Error(defaultErrorMessage);
+};
+
+export const getAuthorizationCookie = () => {
+  return Cookies.get('wordpress_mypages_session');
+};
+
+export const getUser = () => {
+  return fetch(`${'https://e0rmbakcci.execute-api.eu-north-1.amazonaws.com/dev/'}users/me`, {
+    method: 'GET',
+    headers: new Headers({
+      'x-api-key': 'XV1z4BJs9p8b6GliroylfQfDtsKPZuB6XItJwq5b',
+      Authorization: `Bearer ${getAuthorizationCookie()}`,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status.toString());
+      }
+      return response.json();
+    })
+    .then((response) => {
+      return response.data.attributes;
+    });
 };
 
 export {
