@@ -16,5 +16,27 @@
             "type": "vcs",
             "url": "https://github.com/helsingborg-stad/modularity-mhbooking.git"
         }
-    ]
+    ],
+    "extra" : {
+        "builder": {
+            "commands": [
+                "npm install --no-progress",
+                "npx --yes browserslist@latest --update-db",
+                "npm run build",
+                "composer install --prefer-dist --no-progress"
+            ],
+            "removables": [
+                ".git",
+                ".gitignore",
+                ".github",
+                "build.php",
+                "composer.json",
+                "composer.lock",
+                "webpack.config.js",
+                "node_modules",
+                "package-lock.json",
+                "package.json"
+            ]
+        }
+    }
 }
